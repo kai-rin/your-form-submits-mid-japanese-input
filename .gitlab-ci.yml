@@ -1,0 +1,16 @@
+image: jekyll/jekyll
+
+pages:
+  script:
+  - jekyll build -d public --config _config.yml
+  artifacts:
+    paths:
+    - public
+  only:
+  - main
+
+variables:
+  JEKYLL_ENV: production
+  THEME: "jekyll-theme-minimal"
+  TITLE: "Your Form Submits Mid-Japanese Input"
+  DESCRIPTION: "A static site to link people to when their web form submits upon the user confirming their Japanese input."
