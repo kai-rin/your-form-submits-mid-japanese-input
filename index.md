@@ -63,7 +63,7 @@ element.addEventListener("keydown", (event) => {
 Some forms avoid this problem entirely through design:
 
 - **Use a submit button only** -- don't bind Enter to submission at all.
-- **Use Shift+Enter to submit** -- this is how Slack, Discord, and many chat apps work. Enter inserts a line break or confirms IME input; Shift+Enter sends.
+- **Use Ctrl+Enter (or Cmd+Enter on macOS) to submit** -- a deliberate modifier key combination avoids accidental submission. Enter handles line breaks and IME confirmation; Ctrl/Cmd+Enter sends.
 
 The key point: **never let a bare Enter keypress trigger form submission** without checking whether the user is composing text.
 
