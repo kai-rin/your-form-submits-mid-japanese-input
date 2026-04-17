@@ -11,8 +11,8 @@ This problem can make it virtually impossible for Japanese users to type more th
 The static site in this repository provides:
 
 - A clear explanation of the problem and why it occurs
-- Examples of how this issue affects Japanese users
-- Suggestions for fixing the problem in your own web forms
+- A concrete code fix (`isComposing` check) that works in all modern browsers
+- Design alternatives for form submission behavior
 
 ## View the site
 

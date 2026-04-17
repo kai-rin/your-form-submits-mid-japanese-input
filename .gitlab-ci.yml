@@ -13,4 +13,4 @@ variables:
   JEKYLL_ENV: production
   THEME: "jekyll-theme-minimal"
   TITLE: "Your Form Submits Mid-Japanese Input"
-  DESCRIPTION: "A static site to link people to when their web form submits upon the user confirming their Japanese input."
+  DESCRIPTION: "A static site to link people to when their web form submits upon the user confirming their IME input."
