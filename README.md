@@ -1,3 +1,5 @@
+**[日本語](README.ja.md)** | **[中文](README.zh-CN.md)** | **[한국어](README.ko.md)**
+
 # Your Form Submits Mid-Japanese Input
 
 This repository contains a static site that explains a common problem with web forms for Japanese users. When a Japanese user hits the Enter key to confirm their input, the form may unintentionally submit, causing frustration and interrupting the user's text entry.
