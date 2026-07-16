@@ -149,6 +149,12 @@ You don't need to know Japanese to test your own form. Every major OS ships an I
 </div>
 </details>
 
+## Doesn't the browser handle this already?
+
+For a plain `<form>` with an `<input>` and no JavaScript, mostly yes: when the user presses Enter to confirm a composition, modern browsers treat that Enter as part of the IME interaction and don't trigger implicit form submission. (Some browsers historically got this wrong, which is part of how this bug became folklore among IME users.)
+
+The problem is custom key handling. The `keydown` event itself always fires during composition -- that's by design, so pages can react to typing. The moment your code says `if (event.key === "Enter") send()`, you've recreated the bug, because that condition can't tell a confirming Enter from a sending Enter. Chat UIs, Enter-to-search fields, comment boxes, custom autocomplete widgets -- anywhere JavaScript listens for Enter is where IME users get burned. That's why the fix belongs in your `keydown` handler.
+
 ## What about other languages?
 
 This problem affects any language that uses an IME -- not just Japanese. Chinese (Pinyin, Zhuyin), Korean (Hangul), and others all go through a composition step that uses the Enter key. The `isComposing` fix shown above works for all of them.
@@ -163,7 +169,7 @@ This site was created from the author's firsthand experience with Japanese input
 
 ## Changelog
 
-- **2026-07-16** -- Added an interactive demo that simulates IME typing (no IME needed), a live event inspector, framework notes for React and Vue, and steps for testing with a real IME.
+- **2026-07-16** -- Added an interactive demo that simulates IME typing (no IME needed), a live event inspector, framework notes for React and Vue, steps for testing with a real IME, and a note on why custom keydown handlers (not plain forms) are where this bug lives.
 - **2026-04-17** -- Added `isComposing` code example and Safari fallback explanation. Expanded scope to cover Chinese and Korean IME. Replaced dead W3C link with MDN references. Added concrete examples for chat interfaces and AI generation tools.
 - **2024-03-17** -- Initial publication.
 
@@ -207,6 +213,7 @@ button.ime-ctrl { border: 1px solid #39c; background: #eaf5fb; color: #1a6a94; }
 .ime-demo-summary { margin-top: 8px; font-size: 14px; }
 .ime-demo-summary:not(:empty) { border-left: 3px solid #39c; padding: 6px 10px; background: #f0f7fb; border-radius: 0 6px 6px 0; }
 .ime-smallprint { font-size: 12px; color: #888; }
+.ime-inspector { margin-bottom: 1.6em; }
 .ime-inspector-body textarea { width: 100%; box-sizing: border-box; font-size: 14px; padding: 6px; margin: 8px 0 6px; }
 .ime-inspector-log { font-family: monospace; font-size: 11.5px; white-space: pre; overflow: auto; max-height: 220px; min-height: 80px; background: #1e1e1e; color: #ccc; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
 .ime-log-comp { color: #7fd4ff; }
