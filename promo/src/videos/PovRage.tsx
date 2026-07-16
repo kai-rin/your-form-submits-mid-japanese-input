@@ -21,7 +21,7 @@ const FIRE1 = 6.87;
 const FIRE2 = 11.84;
 const BOSS = [
   { text: "??", t: 8.1 },
-  { text: "？？", t: 13.15 },
+  { text: "???", t: 13.15 },
 ];
 
 const HOOK_END = 3.2;
@@ -41,8 +41,8 @@ const Hook: React.FC<{ t: number }> = ({ t }) => {
       <div style={{ fontSize: 196, fontWeight: 900, color: COLORS.text, lineHeight: 1.08, opacity: l2, scale: String(l2s) }}>
         ONE sentence.
       </div>
-      <div style={{ fontSize: 88, fontWeight: 700, color: COLORS.blue, marginTop: 34, opacity: l3 }} lang="ja">
-        たった一文が、送れない。
+      <div style={{ fontSize: 84, fontWeight: 700, color: COLORS.blue, marginTop: 34, opacity: l3 }}>
+        as a Japanese user — in your web app.
       </div>
     </AbsoluteFill>
   );
@@ -63,12 +63,12 @@ const Typing: React.FC<{ t: number }> = ({ t }) => {
   return (
     <AbsoluteFill style={{ opacity: enter * exit }}>
       <div style={{ position: "absolute", top: 96, left: 96, right: 96 }}>
-        <Caption time={t} from={3.5} to={5.85} en="Typing the reading…" jp="まず、読みを入力" />
-        <Caption time={t} from={5.9} to={6.85} en="Space → kanji. Enter = confirm." jp="Spaceで変換、Enterで確定" />
-        <Caption time={t} from={6.98} to={8.75} en="IT SENT?!" jp="え、送信された！？" enSize={132} color={COLORS.red} />
-        <Caption time={t} from={9.1} to={10.9} en="Deep breath. The second half…" jp="気を取り直して、続き" />
-        <Caption time={t} from={12.0} to={13.95} en="I WASN'T DONE." enSize={126} color={COLORS.red} />
-        <Caption time={t} from={14.3} to={15.95} en="2 fragments. 0 finished sentences." jp="完成した文、ゼロ。" />
+        <Caption time={t} from={3.5} to={5.85} en="Typing the reading…" sub="romaji becomes hiragana as you type" />
+        <Caption time={t} from={5.9} to={6.85} en="Space picks the kanji. Enter confirms it." />
+        <Caption time={t} from={6.98} to={8.75} en="IT SENT?!" sub="that Enter only meant “yes, this kanji”" enSize={132} color={COLORS.red} />
+        <Caption time={t} from={9.1} to={10.9} en="Deep breath. The second half…" />
+        <Caption time={t} from={12.0} to={13.95} en="Every. Single. Sentence." enSize={120} color={COLORS.red} />
+        <Caption time={t} from={14.3} to={15.95} en="2 fragments sent. 0 sentences finished." />
       </div>
       <div
         style={{
@@ -83,21 +83,21 @@ const Typing: React.FC<{ t: number }> = ({ t }) => {
           time={t}
           width={920}
           height={650}
-          title="部長"
-          subtitle="オンライン"
+          title="My boss"
+          subtitle="online"
           accent={COLORS.redDeep}
           theirMessages={BOSS}
         />
       </div>
-      <Stamp text="SENT ✗" time={t} t0={FIRE1} hold={1.7} color={COLORS.red} fontSize={140} x={1080} y={320} rotate={-9} />
+      <Stamp text="SENT ✗" time={t} t0={FIRE1} hold={1.7} color={COLORS.red} fontSize={140} x={1140} y={430} rotate={-9} />
       <Stamp
-        text="まだ途中なのに！！"
+        text="I WASN'T DONE!!"
         time={t}
         t0={FIRE2}
         hold={2.3}
         color={COLORS.red}
-        fontSize={126}
-        x={330}
+        fontSize={118}
+        x={370}
         y={520}
         rotate={-6}
       />
@@ -127,8 +127,8 @@ const Reveal: React.FC<{ t: number }> = ({ t }) => {
         <div style={{ fontSize: 122, fontWeight: 900, color: COLORS.blue, lineHeight: 1.22 }}>
           It meant “yes, that’s the right kanji”.
         </div>
-        <div style={{ fontSize: 76, fontWeight: 700, color: COLORS.dim, marginTop: 44, opacity: jp }} lang="ja">
-          Enterは変換の確定。送信じゃない。
+        <div style={{ fontSize: 68, fontWeight: 700, color: COLORS.dim, marginTop: 44, opacity: jp }}>
+          The Enter key does double duty in Japanese, Chinese and Korean input.
         </div>
       </div>
     </AbsoluteFill>

@@ -5,9 +5,9 @@ import { COLORS, JP_FONT, MONO_FONT } from "../theme";
 // Shared final scene: the one-line fix + CTA with the site URL.
 // Mount inside a <Sequence> so local frame starts at 0.
 // Sized to fit 1080px height with margin: headline ~190 + code ~230 + cta ~330 + gaps.
-export const FixAndCta: React.FC<{ headline?: string; headlineJp?: string }> = ({
+export const FixAndCta: React.FC<{ headline?: string; sub?: string }> = ({
   headline = "The fix is one line.",
-  headlineJp = "修正は、たった一行。",
+  sub = "Works for Japanese, Chinese and Korean input alike.",
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -29,9 +29,7 @@ export const FixAndCta: React.FC<{ headline?: string; headlineJp?: string }> = (
           <div style={{ fontSize: 112, fontWeight: 900, color: COLORS.text, lineHeight: 1.1, whiteSpace: "nowrap" }}>
             {headline}
           </div>
-          <div style={{ fontSize: 58, fontWeight: 700, color: COLORS.dim, marginTop: 10, whiteSpace: "nowrap" }} lang="ja">
-            {headlineJp}
-          </div>
+          <div style={{ fontSize: 54, fontWeight: 700, color: COLORS.dim, marginTop: 10, whiteSpace: "nowrap" }}>{sub}</div>
         </div>
 
         <div

@@ -38,8 +38,8 @@ const Hero: React.FC<{ t: number }> = ({ t }) => {
       <div style={{ fontSize: 152, fontWeight: 900, color: COLORS.text, opacity: l1, scale: String(s1), lineHeight: 1.12, width: 1700 }}>
         Your Enter key is <span style={{ color: COLORS.blue }}>bilingual</span>.
       </div>
-      <div style={{ fontSize: 84, fontWeight: 700, color: COLORS.dim, marginTop: 40, opacity: l2 }} lang="ja">
-        Enter ＝ 送信、とは限らない。
+      <div style={{ fontSize: 78, fontWeight: 700, color: COLORS.dim, marginTop: 40, opacity: l2 }}>
+        In Japanese, Chinese and Korean input, it doesn’t mean “send”.
       </div>
     </AbsoluteFill>
   );
@@ -111,12 +111,12 @@ const Meaning: React.FC<{ t: number }> = ({ t }) => {
           <Keycap label="Space" size={38} accent={COLORS.blue} />
           {chip("明日", { background: COLORS.convertBg })}
           <Keycap label="⏎" size={38} accent={COLORS.blue} minWidth={96} />
-          {chip("確定 ✓", { background: COLORS.greenSoft, color: COLORS.greenText })}
+          {chip("confirmed ✓", { background: COLORS.greenSoft, color: COLORS.greenText, fontFamily: JP_FONT })}
         </div>
         <div style={{ textAlign: "center", marginTop: 34 }}>
-          <div style={{ fontSize: 64, fontWeight: 700, color: COLORS.text }}>Enter here confirms the kanji — nothing is sent.</div>
-          <div style={{ fontSize: 48, fontWeight: 700, color: COLORS.dim, marginTop: 8 }} lang="ja">
-            この Enter では、何も送信されない。
+          <div style={{ fontSize: 64, fontWeight: 700, color: COLORS.text }}>That Enter confirms the kanji — nothing is sent.</div>
+          <div style={{ fontSize: 48, fontWeight: 700, color: COLORS.dim, marginTop: 8 }}>
+            (typing “asu” → あす, Space converts it to 明日 “tomorrow”)
           </div>
         </div>
       </div>
@@ -167,21 +167,21 @@ const Chaos: React.FC<{ t: number }> = ({ t }) => {
           time={t}
           width={800}
           height={560}
-          title="部長"
-          subtitle="オンライン"
+          title="My boss"
+          subtitle="online"
           accent={COLORS.redDeep}
           fontSize={52}
           theirMessages={BOSS}
         />
       </div>
       <Stamp
-        text="まだ途中なのに！"
+        text="I WASN'T DONE!"
         time={t}
         t0={FIRES[1] ?? 14.93}
         hold={1.25}
         color={COLORS.red}
-        fontSize={112}
-        x={420}
+        fontSize={108}
+        x={480}
         y={560}
         rotate={-6}
       />
@@ -202,7 +202,7 @@ export const EnterLie: React.FC = () => {
       {t >= HERO_END - 0.1 && t < MEANING_END ? <Meaning t={t} /> : null}
       {t >= MEANING_END - 0.1 && t < CHAOS_END ? <Chaos t={t} /> : null}
       <Sequence from={sec(CHAOS_END)}>
-        <FixAndCta headline="One line protects 1.5B people." headlineJp="この一行で、世界中のIMEユーザーが救われる。" />
+        <FixAndCta headline="One line protects 1.5B people." sub="Everyone who types with an IME — Japanese, Chinese, Korean and more." />
       </Sequence>
       <Audio loop src={staticFile("sfx/pad.wav")} volume={0.6} />
       <SfxTrack cues={imeCues(EVENTS)} />

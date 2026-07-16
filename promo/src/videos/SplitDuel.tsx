@@ -39,19 +39,19 @@ const Splash: React.FC<{ t: number }> = ({ t }) => {
         SAME KEYSTROKES.
       </div>
       <div style={{ fontSize: 172, fontWeight: 900, color: COLORS.blue, opacity: l2, lineHeight: 1.05 }}>TWO FORMS.</div>
-      <div style={{ fontSize: 82, fontWeight: 700, color: COLORS.dim, marginTop: 36, opacity: l3 }} lang="ja">
-        同じ打鍵を、二つのフォームに流します
+      <div style={{ fontSize: 78, fontWeight: 700, color: COLORS.dim, marginTop: 36, opacity: l3 }}>
+        One naive handler. One that checks isComposing.
       </div>
     </AbsoluteFill>
   );
 };
 
-const Banner: React.FC<{ t: number; from: number; to: number; en: string; jp: string; color?: string }> = ({
+const Banner: React.FC<{ t: number; from: number; to: number; en: string; sub?: string; color?: string }> = ({
   t,
   from,
   to,
   en,
-  jp,
+  sub,
   color = COLORS.text,
 }) => {
   if (t < from || t > to) return null;
@@ -74,9 +74,9 @@ const Banner: React.FC<{ t: number; from: number; to: number; en: string; jp: st
         }}
       >
         <div style={{ fontSize: 92, fontWeight: 900, color, lineHeight: 1.12, whiteSpace: "nowrap" }}>{en}</div>
-        <div style={{ fontSize: 60, fontWeight: 700, color: COLORS.dim, marginTop: 10, whiteSpace: "nowrap" }} lang="ja">
-          {jp}
-        </div>
+        {sub ? (
+          <div style={{ fontSize: 56, fontWeight: 700, color: COLORS.dim, marginTop: 10, whiteSpace: "nowrap" }}>{sub}</div>
+        ) : null}
       </div>
     </AbsoluteFill>
   );
@@ -158,7 +158,7 @@ const Duel: React.FC<{ t: number }> = ({ t }) => {
           width={820}
           height={620}
           title="❌ Naive form"
-          subtitle="Enterで毎回送信"
+          subtitle="sends on every Enter"
           accent={COLORS.redDeep}
           fontSize={56}
         />
@@ -170,7 +170,7 @@ const Duel: React.FC<{ t: number }> = ({ t }) => {
           width={820}
           height={620}
           title="✅ Fixed form"
-          subtitle="isComposing をチェック"
+          subtitle="checks isComposing"
           accent={COLORS.greenDeep}
           fontSize={56}
         />
@@ -178,11 +178,11 @@ const Duel: React.FC<{ t: number }> = ({ t }) => {
 
       <Stamp text="✗ SENT" time={t} t0={FIRE1} hold={1.5} color={COLORS.red} fontSize={104} x={300} y={430} rotate={-10} />
       <Stamp text="✗ SENT AGAIN" time={t} t0={FIRE2} hold={1.35} color={COLORS.red} fontSize={92} x={200} y={430} rotate={-8} />
-      <Stamp text="✓ 完璧" time={t} t0={SEND} hold={2.1} color={COLORS.green} fontSize={110} x={1300} y={430} rotate={7} />
+      <Stamp text="✓ PERFECT" time={t} t0={SEND} hold={2.1} color={COLORS.green} fontSize={104} x={1240} y={760} rotate={7} />
 
-      <Banner t={t} from={7.05} to={8.65} en="That Enter = CONFIRM, not send" jp="その Enter は「確定」" color={COLORS.red} />
-      <Banner t={t} from={14.0} to={15.4} en="This Enter = the real send" jp="これが本当の「送信」" color={COLORS.green} />
-      <Banner t={t} from={15.6} to={17.05} en="Same keys. Opposite fate." jp="同じキー、真逆の結果。" />
+      <Banner t={t} from={7.05} to={8.65} en="That Enter = CONFIRM, not send" sub="the user just picked their kanji" color={COLORS.red} />
+      <Banner t={t} from={14.0} to={15.4} en="This Enter = the real send" sub="composition is over — now Enter means send" color={COLORS.green} />
+      <Banner t={t} from={15.6} to={17.05} en="Same keys. Opposite fate." />
 
       <div
         style={{
@@ -243,15 +243,16 @@ const Score: React.FC<{ t: number }> = ({ t }) => {
       <div style={card(c1, c1s, COLORS.red)}>
         <div style={{ fontSize: 224, fontWeight: 900, color: COLORS.red, lineHeight: 1 }}>2</div>
         <div style={{ fontSize: 76, fontWeight: 900, color: COLORS.text }}>fragments ✗</div>
-        <div style={{ fontSize: 56, fontWeight: 700, color: COLORS.dim, marginTop: 14 }} lang="ja">
-          文は最後まで届かない
-        </div>
+        <div style={{ fontSize: 56, fontWeight: 700, color: COLORS.dim, marginTop: 14 }}>the sentence never arrived</div>
       </div>
       <div style={card(c2, c2s, COLORS.green)}>
         <div style={{ fontSize: 224, fontWeight: 900, color: COLORS.green, lineHeight: 1 }}>1</div>
         <div style={{ fontSize: 66, fontWeight: 900, color: COLORS.text, whiteSpace: "nowrap" }}>complete message ✓</div>
-        <div style={{ fontSize: 56, fontWeight: 700, color: COLORS.dim, marginTop: 14 }} lang="ja">
+        <div style={{ fontSize: 54, fontWeight: 700, color: COLORS.dim, marginTop: 14 }} lang="ja">
           {FULL_SENTENCE}
+        </div>
+        <div style={{ fontSize: 44, fontWeight: 700, color: COLORS.dim, marginTop: 6, fontStyle: "italic" }}>
+          “Tomorrow’s meeting starts at 10.”
         </div>
       </div>
     </AbsoluteFill>

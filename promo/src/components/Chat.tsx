@@ -81,7 +81,7 @@ export const Chat: React.FC<{
   fontSize = 64,
   theirMessages = [],
   showBadges = true,
-  placeholder = "メッセージを入力…",
+  placeholder = "Type a message…",
 }) => {
   const items: Array<
     | { kind: "mine"; text: string; premature: boolean; t: number }
@@ -148,7 +148,7 @@ export const Chat: React.FC<{
               premature={m.premature}
               ok={!m.premature}
               fontSize={fontSize}
-              badge={showBadges ? (m.premature ? "✗ 途中で送信された" : "✓ complete") : undefined}
+              badge={showBadges ? (m.premature ? "✗ sent mid-sentence" : "✓ complete") : undefined}
             />
           ),
         )}
@@ -211,7 +211,7 @@ export const Chat: React.FC<{
             padding: `${inputFs * 0.28}px ${inputFs * 0.55}px`,
           }}
         >
-          送信
+          Send
         </div>
       </div>
     </div>
