@@ -10,21 +10,21 @@ import { FULL_SENTENCE, buildTypingEvents, sendTime, stateAt } from "../lib/ime"
 import { COLORS, JP_FONT, flashAt, sumShake } from "../theme";
 
 const EVENTS = buildTypingEvents({
-  start: 3.8,
-  keyInterval: 0.18,
-  convertGap: 0.9,
-  confirmGap: 1.15,
-  chunkGap: 1.9,
-  sendGap: 1.5,
+  start: 4.4,
+  keyInterval: 0.2,
+  convertGap: 1.0,
+  confirmGap: 1.5,
+  chunkGap: 2.2,
+  sendGap: 1.8,
 });
-// confirm1 ≈ 6.93, confirm2 ≈ 11.96, send ≈ 13.46
-const FIRE1 = 6.93;
-const FIRE2 = 11.96;
+// confirm1 ≈ 8.1, confirm2 ≈ 14.0, send ≈ 15.8
+const FIRE1 = 8.1;
+const FIRE2 = 14.0;
 const SEND = sendTime(EVENTS)!;
 
-const SPLASH_END = 3.0;
-const DUEL_END = 17.2;
-const SCORE_END = 21.2;
+const SPLASH_END = 3.4;
+const DUEL_END = 20.0;
+const SCORE_END = 24.4;
 
 const Splash: React.FC<{ t: number }> = ({ t }) => {
   const ease = Easing.out(Easing.cubic);
@@ -176,13 +176,13 @@ const Duel: React.FC<{ t: number }> = ({ t }) => {
         />
       </div>
 
-      <Stamp text="✗ SENT" time={t} t0={FIRE1} hold={1.5} color={COLORS.red} fontSize={104} x={300} y={430} rotate={-10} />
-      <Stamp text="✗ SENT AGAIN" time={t} t0={FIRE2} hold={1.35} color={COLORS.red} fontSize={92} x={200} y={430} rotate={-8} />
-      <Stamp text="✓ PERFECT" time={t} t0={SEND} hold={2.1} color={COLORS.green} fontSize={104} x={1240} y={760} rotate={7} />
+      <Stamp text="✗ SENT" time={t} t0={FIRE1} hold={1.9} color={COLORS.red} fontSize={104} x={300} y={430} rotate={-10} />
+      <Stamp text="✗ SENT AGAIN" time={t} t0={FIRE2} hold={1.6} color={COLORS.red} fontSize={92} x={200} y={430} rotate={-8} />
+      <Stamp text="✓ PERFECT" time={t} t0={SEND} hold={2.4} color={COLORS.green} fontSize={104} x={1240} y={760} rotate={7} />
 
-      <Banner t={t} from={7.05} to={8.65} en="That Enter = CONFIRM, not send" sub="the user just picked their kanji" color={COLORS.red} />
-      <Banner t={t} from={14.0} to={15.4} en="This Enter = the real send" sub="composition is over — now Enter means send" color={COLORS.green} />
-      <Banner t={t} from={15.6} to={17.05} en="Same keys. Opposite fate." />
+      <Banner t={t} from={8.25} to={10.15} en="That Enter = CONFIRM, not send" sub="the user just picked their kanji" color={COLORS.red} />
+      <Banner t={t} from={16.3} to={18.15} en="This Enter = the real send" sub="composition is over — now Enter means send" color={COLORS.green} />
+      <Banner t={t} from={18.35} to={19.85} en="Same keys. Opposite fate." />
 
       <div
         style={{
@@ -273,8 +273,13 @@ export const SplitDuel: React.FC = () => {
       <Sequence from={sec(SCORE_END)}>
         <FixAndCta />
       </Sequence>
-      <Audio loop src={staticFile("sfx/pad.wav")} volume={0.6} />
+      <Audio src={staticFile("bgm/split-duel.wav")} volume={0.9} />
       <SfxTrack cues={imeCues(EVENTS, { fixedSend: true })} />
+      {[FIRE1, FIRE2, SEND].map((s, i) => (
+        <Sequence key={`th${i}`} from={sec(s)}>
+          <Audio src={staticFile("sfx/thud.wav")} volume={0.5} />
+        </Sequence>
+      ))}
       {[SPLASH_END, DUEL_END, SCORE_END].map((s, i) => (
         <Sequence key={i} from={sec(s - 0.12)}>
           <Audio src={staticFile("sfx/whoosh.wav")} volume={0.4} />

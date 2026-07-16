@@ -9,20 +9,20 @@ import { Stamp } from "../components/Stamp";
 import { buildTypingEvents, stateAt } from "../lib/ime";
 import { COLORS, JP_FONT, MONO_FONT, flashAt, sumShake } from "../theme";
 
-const HERO_END = 3.6;
-const MEANING_END = 9.6;
-const CHAOS_END = 16.2;
+const HERO_END = 4.2;
+const MEANING_END = 12.2;
+const CHAOS_END = 21.4;
 
 const EVENTS = buildTypingEvents({
-  start: 11.2,
-  keyInterval: 0.09,
-  convertGap: 0.4,
-  confirmGap: 0.5,
-  chunkGap: 0.85,
+  start: 14.0,
+  keyInterval: 0.12,
+  convertGap: 0.6,
+  confirmGap: 0.8,
+  chunkGap: 1.2,
 });
-// confirm1 ≈ 12.64, confirm2 ≈ 14.93 → keep inside CHAOS scene
+// confirm1 ≈ 16.12, confirm2 ≈ 19.44 → keep inside CHAOS scene
 const FIRES = EVENTS.filter((e) => e.kind === "confirm").map((e) => e.t);
-const BOSS = [{ text: "??", t: 15.35 }];
+const BOSS = [{ text: "??", t: 20.15 }];
 
 const Hero: React.FC<{ t: number }> = ({ t }) => {
   const l1 = interpolate(t, [0.2, 0.65], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
@@ -49,12 +49,12 @@ const Meaning: React.FC<{ t: number }> = ({ t }) => {
   const ease = Easing.out(Easing.cubic);
   const enter = interpolate(t, [HERO_END, HERO_END + 0.45], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const exit = interpolate(t, [MEANING_END - 0.35, MEANING_END], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const c1 = interpolate(t, [3.7, 4.15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const c1x = interpolate(t, [3.7, 4.2], [-70, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease });
-  const c2 = interpolate(t, [4.1, 4.55], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const c2x = interpolate(t, [4.1, 4.6], [70, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease });
-  const stripOp = interpolate(t, [5.7, 6.15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const stripRise = interpolate(t, [5.7, 6.2], [46, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease });
+  const c1 = interpolate(t, [4.35, 4.8], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const c1x = interpolate(t, [4.35, 4.85], [-70, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease });
+  const c2 = interpolate(t, [4.75, 5.2], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const c2x = interpolate(t, [4.75, 5.25], [70, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease });
+  const stripOp = interpolate(t, [6.9, 7.35], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const stripRise = interpolate(t, [6.9, 7.4], [46, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease });
 
   const card = (opacity: number, x: number, border: string): React.CSSProperties => ({
     opacity,
@@ -129,9 +129,9 @@ const Chaos: React.FC<{ t: number }> = ({ t }) => {
   const shake = sumShake(t, FIRES, 16);
   const enter = interpolate(t, [MEANING_END, MEANING_END + 0.4], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const exit = interpolate(t, [CHAOS_END - 0.35, CHAOS_END], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const headOp = interpolate(t, [9.75, 10.15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const codeOp = interpolate(t, [10.25, 10.6], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const codeScale = interpolate(t, [10.25, 10.65], [1.35, 1], {
+  const headOp = interpolate(t, [12.35, 12.75], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const codeOp = interpolate(t, [12.9, 13.25], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const codeScale = interpolate(t, [12.9, 13.3], [1.35, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.out(Easing.cubic),
@@ -177,8 +177,8 @@ const Chaos: React.FC<{ t: number }> = ({ t }) => {
       <Stamp
         text="I WASN'T DONE!"
         time={t}
-        t0={FIRES[1] ?? 14.93}
-        hold={1.25}
+        t0={FIRES[1] ?? 19.44}
+        hold={1.6}
         color={COLORS.red}
         fontSize={108}
         x={480}
@@ -202,10 +202,19 @@ export const EnterLie: React.FC = () => {
       {t >= HERO_END - 0.1 && t < MEANING_END ? <Meaning t={t} /> : null}
       {t >= MEANING_END - 0.1 && t < CHAOS_END ? <Chaos t={t} /> : null}
       <Sequence from={sec(CHAOS_END)}>
-        <FixAndCta headline="One line protects 1.5B people." sub="Everyone who types with an IME — Japanese, Chinese, Korean and more." />
+        <FixAndCta
+          headline="One line protects 1.5B people."
+          sub="Everyone who types with an IME."
+          tagline="Your users have been working around this for years. Fix it in five minutes."
+        />
       </Sequence>
-      <Audio loop src={staticFile("sfx/pad.wav")} volume={0.6} />
+      <Audio src={staticFile("bgm/enter-lie.wav")} volume={0.9} />
       <SfxTrack cues={imeCues(EVENTS)} />
+      {FIRES.slice(1).map((s, i) => (
+        <Sequence key={`th${i}`} from={sec(s)}>
+          <Audio src={staticFile("sfx/thud.wav")} volume={0.5} />
+        </Sequence>
+      ))}
       {[HERO_END, MEANING_END, CHAOS_END].map((s, i) => (
         <Sequence key={i} from={sec(s - 0.12)}>
           <Audio src={staticFile("sfx/whoosh.wav")} volume={0.4} />

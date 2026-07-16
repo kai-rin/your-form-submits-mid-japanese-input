@@ -127,3 +127,17 @@ const rand = () => {
   }
   writeWav("pad.wav", out);
 }
+
+// stamp slam thud
+{
+  const n = sec(0.24);
+  const out = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const t = i / SR;
+    const phase = 2 * Math.PI * (38 * t + (90 / 22) * (1 - Math.exp(-22 * t)));
+    let v = Math.sin(phase) * Math.exp(-t * 12) * 0.55;
+    if (t < 0.03) v += rand() * Math.exp(-t * 160) * 0.3;
+    out[i] = v;
+  }
+  writeWav("thud.wav", out);
+}

@@ -9,9 +9,9 @@ const FPS = 30;
 export const RemotionRoot: React.FC = () => {
   return (
     <>
-      <Composition id="PovRage" component={PovRage} durationInFrames={24 * FPS} fps={FPS} width={1920} height={1080} />
-      <Composition id="SplitDuel" component={SplitDuel} durationInFrames={26 * FPS} fps={FPS} width={1920} height={1080} />
-      <Composition id="EnterLie" component={EnterLie} durationInFrames={22 * FPS} fps={FPS} width={1920} height={1080} />
+      <Composition id="PovRage" component={PovRage} durationInFrames={30 * FPS} fps={FPS} width={1920} height={1080} />
+      <Composition id="SplitDuel" component={SplitDuel} durationInFrames={30 * FPS} fps={FPS} width={1920} height={1080} />
+      <Composition id="EnterLie" component={EnterLie} durationInFrames={30 * FPS} fps={FPS} width={1920} height={1080} />
     </>
   );
 };

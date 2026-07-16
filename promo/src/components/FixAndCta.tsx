@@ -5,9 +5,10 @@ import { COLORS, JP_FONT, MONO_FONT } from "../theme";
 // Shared final scene: the one-line fix + CTA with the site URL.
 // Mount inside a <Sequence> so local frame starts at 0.
 // Sized to fit 1080px height with margin: headline ~190 + code ~230 + cta ~330 + gaps.
-export const FixAndCta: React.FC<{ headline?: string; sub?: string }> = ({
+export const FixAndCta: React.FC<{ headline?: string; sub?: string; tagline?: string }> = ({
   headline = "The fix is one line.",
   sub = "Works for Japanese, Chinese and Korean input alike.",
+  tagline,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -21,6 +22,7 @@ export const FixAndCta: React.FC<{ headline?: string; sub?: string }> = ({
   const glow = interpolate(t, [0.9, 1.4], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const ctaOp = interpolate(t, [1.5, 1.95], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const ctaRise = interpolate(t, [1.5, 2.0], [40, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: ease });
+  const tagOp = interpolate(t, [4.6, 5.2], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
     <AbsoluteFill style={{ fontFamily: JP_FONT, alignItems: "center", justifyContent: "center" }}>
@@ -74,6 +76,10 @@ export const FixAndCta: React.FC<{ headline?: string; sub?: string }> = ({
             /your-form-submits-mid-japanese-input
           </div>
         </div>
+
+        {tagline ? (
+          <div style={{ opacity: tagOp, fontSize: 46, fontWeight: 700, color: COLORS.dim, whiteSpace: "nowrap" }}>{tagline}</div>
+        ) : null}
       </div>
     </AbsoluteFill>
   );

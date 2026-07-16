@@ -10,23 +10,23 @@ import { buildTypingEvents, stateAt } from "../lib/ime";
 import { COLORS, JP_FONT, flashAt, sumShake } from "../theme";
 
 const EVENTS = buildTypingEvents({
-  start: 4.2,
-  keyInterval: 0.17,
-  convertGap: 0.55,
-  confirmGap: 1.1,
-  chunkGap: 2.3,
+  start: 4.6,
+  keyInterval: 0.21,
+  convertGap: 0.8,
+  confirmGap: 1.3,
+  chunkGap: 2.8,
 });
-// fires: confirm1 ≈ 6.87s, confirm2 ≈ 11.84s
-const FIRE1 = 6.87;
-const FIRE2 = 11.84;
+// fires: confirm1 ≈ 7.96s, confirm2 ≈ 14.12s
+const FIRE1 = 7.96;
+const FIRE2 = 14.12;
 const BOSS = [
-  { text: "??", t: 8.1 },
-  { text: "???", t: 13.15 },
+  { text: "??", t: 9.4 },
+  { text: "???", t: 15.5 },
 ];
 
-const HOOK_END = 3.2;
-const TYPING_END = 16.2;
-const REVEAL_END = 19.6;
+const HOOK_END = 3.6;
+const TYPING_END = 20.4;
+const REVEAL_END = 24.6;
 
 const Hook: React.FC<{ t: number }> = ({ t }) => {
   const ease = Easing.out(Easing.cubic);
@@ -63,12 +63,12 @@ const Typing: React.FC<{ t: number }> = ({ t }) => {
   return (
     <AbsoluteFill style={{ opacity: enter * exit }}>
       <div style={{ position: "absolute", top: 96, left: 96, right: 96 }}>
-        <Caption time={t} from={3.5} to={5.85} en="Typing the reading…" sub="romaji becomes hiragana as you type" />
-        <Caption time={t} from={5.9} to={6.85} en="Space picks the kanji. Enter confirms it." />
-        <Caption time={t} from={6.98} to={8.75} en="IT SENT?!" sub="that Enter only meant “yes, this kanji”" enSize={132} color={COLORS.red} />
-        <Caption time={t} from={9.1} to={10.9} en="Deep breath. The second half…" />
-        <Caption time={t} from={12.0} to={13.95} en="Every. Single. Sentence." enSize={120} color={COLORS.red} />
-        <Caption time={t} from={14.3} to={15.95} en="2 fragments sent. 0 sentences finished." />
+        <Caption time={t} from={4.0} to={6.5} en="Typing the reading…" sub="romaji becomes hiragana as you type" />
+        <Caption time={t} from={6.55} to={7.9} en="Space picks the kanji. Enter confirms it." />
+        <Caption time={t} from={8.05} to={10.4} en="IT SENT?!" sub="that Enter only meant “yes, this kanji”" enSize={132} color={COLORS.red} />
+        <Caption time={t} from={10.7} to={12.7} en="Deep breath. The second half…" />
+        <Caption time={t} from={14.35} to={16.5} en="Every. Single. Sentence." enSize={120} color={COLORS.red} />
+        <Caption time={t} from={16.9} to={20.1} en="2 fragments sent. 0 sentences finished." />
       </div>
       <div
         style={{
@@ -89,12 +89,12 @@ const Typing: React.FC<{ t: number }> = ({ t }) => {
           theirMessages={BOSS}
         />
       </div>
-      <Stamp text="SENT ✗" time={t} t0={FIRE1} hold={1.7} color={COLORS.red} fontSize={140} x={1140} y={430} rotate={-9} />
+      <Stamp text="SENT ✗" time={t} t0={FIRE1} hold={2.1} color={COLORS.red} fontSize={140} x={1140} y={430} rotate={-9} />
       <Stamp
         text="I WASN'T DONE!!"
         time={t}
         t0={FIRE2}
-        hold={2.3}
+        hold={2.6}
         color={COLORS.red}
         fontSize={118}
         x={370}
@@ -149,8 +149,13 @@ export const PovRage: React.FC = () => {
       <Sequence from={sec(REVEAL_END)}>
         <FixAndCta />
       </Sequence>
-      <Audio loop src={staticFile("sfx/pad.wav")} volume={0.6} />
+      <Audio src={staticFile("bgm/pov-rage.wav")} volume={0.9} />
       <SfxTrack cues={imeCues(EVENTS)} />
+      {[FIRE1, FIRE2].map((s, i) => (
+        <Sequence key={`th${i}`} from={sec(s)}>
+          <Audio src={staticFile("sfx/thud.wav")} volume={0.55} />
+        </Sequence>
+      ))}
       {[HOOK_END, TYPING_END, REVEAL_END].map((s, i) => (
         <Sequence key={i} from={sec(s - 0.12)}>
           <Audio src={staticFile("sfx/whoosh.wav")} volume={0.4} />
