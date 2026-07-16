@@ -13,7 +13,9 @@ This problem can make it virtually impossible for Japanese users to type more th
 The static site in this repository provides:
 
 - A clear explanation of the problem and why it occurs
-- A concrete code fix (`isComposing` check) that works in all modern browsers
+- An interactive demo that simulates IME typing -- experience the bug firsthand, no IME required
+- A concrete code fix (`isComposing` check) that works in all modern browsers, with React/Vue notes
+- A live event inspector and step-by-step instructions for testing your own form with a real IME
 - Design alternatives for form submission behavior
 
 ## View the site
