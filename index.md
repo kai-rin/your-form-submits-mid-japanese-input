@@ -53,13 +53,13 @@ Try to send "明日の会議は10時からです" (*Tomorrow's meeting starts at
   <div class="ime-demo-panes">
     <div class="ime-pane ime-pane-broken">
       <div class="ime-pane-title">❌ Naive form<span class="ime-pane-sub">submits on every Enter</span></div>
-      <div class="ime-pane-messages" id="ime-msgs-broken"></div>
-      <div class="ime-pane-inputrow"><div class="ime-pane-input" id="ime-input-broken"></div><div class="ime-pane-sendbtn">Send</div></div>
+      <div class="ime-pane-messages" id="ime-msgs-broken" lang="ja"></div>
+      <div class="ime-pane-inputrow"><div class="ime-pane-input" id="ime-input-broken" lang="ja"></div><div class="ime-pane-sendbtn">Send</div></div>
     </div>
     <div class="ime-pane ime-pane-fixed">
       <div class="ime-pane-title">✅ Fixed form<span class="ime-pane-sub">checks isComposing</span></div>
-      <div class="ime-pane-messages" id="ime-msgs-fixed"></div>
-      <div class="ime-pane-inputrow"><div class="ime-pane-input" id="ime-input-fixed"></div><div class="ime-pane-sendbtn">Send</div></div>
+      <div class="ime-pane-messages" id="ime-msgs-fixed" lang="ja"></div>
+      <div class="ime-pane-inputrow"><div class="ime-pane-input" id="ime-input-fixed" lang="ja"></div><div class="ime-pane-sendbtn">Send</div></div>
     </div>
   </div>
   <div class="ime-demo-keys">
@@ -189,7 +189,7 @@ Kairin - [X](https://x.com/ckrunch)
 .ime-pane-broken { border-top: 3px solid #d73a49; }
 .ime-pane-fixed { border-top: 3px solid #2da44e; }
 .ime-pane-title { font-size: 13px; font-weight: bold; padding: 6px 8px; border-bottom: 1px solid #eee; }
-.ime-pane-sub { display: block; font-weight: normal; font-size: 11px; color: #888; }
+.ime-pane-sub { display: block; font-weight: normal; font-size: 11px; color: #666; }
 .ime-pane-messages { flex: 1; min-height: 130px; max-height: 180px; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
 .ime-empty { color: #bbb; font-size: 12px; text-align: center; margin: auto; }
 .ime-bubble { align-self: flex-end; max-width: 90%; border-radius: 12px 12px 2px 12px; padding: 5px 9px; font-size: 14px; }
@@ -198,7 +198,7 @@ Kairin - [X](https://x.com/ckrunch)
 .ime-badge { font-size: 10px; margin-top: 2px; }
 .ime-bubble-premature .ime-badge { color: #c0293a; }
 .ime-bubble-ok .ime-badge { color: #1a7f37; }
-.ime-sysline { align-self: center; color: #999; font-size: 11px; font-style: italic; }
+.ime-sysline { align-self: center; color: #666; font-size: 11px; font-style: italic; }
 .ime-pane-inputrow { display: flex; gap: 6px; border-top: 1px solid #eee; padding: 6px; align-items: center; }
 .ime-pane-input { flex: 1; min-height: 1.5em; border: 1px solid #ccc; border-radius: 6px; padding: 3px 6px; font-size: 14px; background: #fff; overflow-wrap: anywhere; }
 .ime-composing { border-bottom: 2px dotted #555; }
@@ -212,7 +212,7 @@ button.ime-key:active { border-bottom-width: 1px; transform: translateY(2px); }
 button.ime-ctrl { border: 1px solid #39c; background: #eaf5fb; color: #1a6a94; }
 .ime-demo-summary { margin-top: 8px; font-size: 14px; }
 .ime-demo-summary:not(:empty) { border-left: 3px solid #39c; padding: 6px 10px; background: #f0f7fb; border-radius: 0 6px 6px 0; }
-.ime-smallprint { font-size: 12px; color: #888; }
+.ime-smallprint { font-size: 12px; color: #666; }
 .ime-inspector { margin-bottom: 1.6em; }
 .ime-inspector-body textarea { width: 100%; box-sizing: border-box; font-size: 14px; padding: 6px; margin: 8px 0 6px; }
 .ime-inspector-log { font-family: monospace; font-size: 11.5px; white-space: pre; overflow: auto; max-height: 220px; min-height: 80px; background: #1e1e1e; color: #ccc; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
@@ -320,7 +320,7 @@ button.ime-ctrl { border: 1px solid #39c; background: #eaf5fb; color: #1a6a94; }
         state.phase = "done";
         stopAuto();
         instruct("Done. Same keystrokes, very different results. Now <a href=\"#the-quick-fix-check-iscomposing\">grab the fix</a>.");
-        el.summary.innerHTML = "Naive form: <strong>2 broken fragments</strong>, the full sentence was never sent. Fixed form: <strong>1 complete message</strong> — 「明日の会議は10時からです」 (“Tomorrow’s meeting starts at 10.”)";
+        el.summary.innerHTML = "Naive form: <strong>2 broken fragments</strong>, the full sentence was never sent. Fixed form: <strong>1 complete message</strong> — <span lang=\"ja\">「明日の会議は10時からです」</span> (“Tomorrow’s meeting starts at 10.”)";
       } else {
         hint("Press <kbd>Enter</kbd> to send the finished message.");
       }
