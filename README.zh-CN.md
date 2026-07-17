@@ -29,3 +29,7 @@ https://kai-rin.github.io/your-form-submits-mid-japanese-input/
 ## 关于作者
 
 本仓库和静态网站由日语母语者 Kairin 创建，起因是对 Web 表单中这一问题的切身困扰。目标是帮助开发者意识到这一问题，并为 IME 用户创建更友好的表单提供参考。
+
+## 许可证
+
+本项目基于 [MIT License](LICENSE) 发布。

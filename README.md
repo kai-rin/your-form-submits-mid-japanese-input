@@ -30,3 +30,7 @@ If you have suggestions for improving the explanation, additional resources to i
 ## About the author
 
 This repository and static site were created by Kairin, a native Japanese speaker, out of frustration with this common web form issue. The goal is to help raise awareness of the problem and provide resources for developers to create more user-friendly forms for Japanese users.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

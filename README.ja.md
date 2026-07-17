@@ -29,3 +29,7 @@ https://kai-rin.github.io/your-form-submits-mid-japanese-input/
 ## 著者について
 
 このリポジトリと静的サイトは、日本語ネイティブスピーカーの Kairin が、Webフォームにおけるこの問題へのフラストレーションから作成しました。開発者がIMEユーザーにとってより使いやすいフォームを作るための啓発と情報提供を目的としています。
+
+## ライセンス
+
+本プロジェクトは [MIT License](LICENSE) の下で公開されています。
