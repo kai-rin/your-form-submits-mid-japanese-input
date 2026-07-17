@@ -14,7 +14,8 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#14161b">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14161b">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf9f7">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌨️</text></svg>">
 <style>
 /* ===== tokens ===== */
@@ -24,7 +25,7 @@
   --bg-raised: #1c1f26;
   --bg-inset: #0c0e11;
   --border: #2e323b;
-  --border-strong: #454b57;
+  --border-strong: #5b6472;
   --text: #edebe6;
   --text-muted: #a6acb8;
   --broken: #ff5c47;
@@ -36,13 +37,81 @@
   --fixed-bg: #10291c;
   --fixed-border: #29593f;
   --accent: #82b4ff;
+  --accent-soft: rgba(130, 180, 255, 0.12);
+  --accent-soft-hover: rgba(130, 180, 255, 0.2);
+  --accent-ring: rgba(130, 180, 255, 0.25);
   --candidate-bg: #23406b;
   --warn: #e3c078;
+  --flash: #3d3320;
+  --log-comp: #7fd4ff;
+  --btn-fix-text: #08130c;
+  --btn-fix-hover: #8fe3b4;
   --font-sans: system-ui, "Segoe UI", -apple-system, "Helvetica Neue", sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", Consolas, Menlo, monospace;
   --font-ja: "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, system-ui, sans-serif;
   --radius: 8px;
   --radius-lg: 12px;
+}
+/* Light theme tokens. The two blocks below must stay identical:
+   the media query serves no-JS visitors whose OS prefers light,
+   the [data-theme] block serves the manual toggle. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #faf9f7;
+    --bg-raised: #ffffff;
+    --bg-inset: #f1efeb;
+    --border: #dcd9d3;
+    --border-strong: #767f8d;
+    --text: #1f2430;
+    --text-muted: #575f6d;
+    --broken: #d03a28;
+    --broken-text: #a52815;
+    --broken-bg: #fceae6;
+    --broken-border: #edbdb3;
+    --fixed: #22a35c;
+    --fixed-text: #156b3d;
+    --fixed-bg: #e6f5eb;
+    --fixed-border: #abd9bd;
+    --accent: #1a63d6;
+    --accent-soft: rgba(26, 99, 214, 0.1);
+    --accent-soft-hover: rgba(26, 99, 214, 0.18);
+    --accent-ring: rgba(26, 99, 214, 0.3);
+    --candidate-bg: #c3d9f9;
+    --warn: #8a5a00;
+    --flash: #f7e6b8;
+    --log-comp: #0d64a8;
+    --btn-fix-text: #08130c;
+    --btn-fix-hover: #2fb469;
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #faf9f7;
+  --bg-raised: #ffffff;
+  --bg-inset: #f1efeb;
+  --border: #dcd9d3;
+  --border-strong: #767f8d;
+  --text: #1f2430;
+  --text-muted: #575f6d;
+  --broken: #d03a28;
+  --broken-text: #a52815;
+  --broken-bg: #fceae6;
+  --broken-border: #edbdb3;
+  --fixed: #22a35c;
+  --fixed-text: #156b3d;
+  --fixed-bg: #e6f5eb;
+  --fixed-border: #abd9bd;
+  --accent: #1a63d6;
+  --accent-soft: rgba(26, 99, 214, 0.1);
+  --accent-soft-hover: rgba(26, 99, 214, 0.18);
+  --accent-ring: rgba(26, 99, 214, 0.3);
+  --candidate-bg: #c3d9f9;
+  --warn: #8a5a00;
+  --flash: #f7e6b8;
+  --log-comp: #0d64a8;
+  --btn-fix-text: #08130c;
+  --btn-fix-hover: #2fb469;
 }
 
 /* ===== base ===== */
@@ -60,6 +129,35 @@ body {
 ::selection { background: var(--candidate-bg); color: var(--text); }
 [id] { scroll-margin-top: 28px; }
 .anchor-alias { position: absolute; }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 20;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+  color: var(--text);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.theme-toggle:hover { border-color: var(--text-muted); }
 a { color: var(--accent); text-underline-offset: 2px; }
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
@@ -139,8 +237,8 @@ section { margin-top: 96px; }
   background: var(--bg-raised);
 }
 .btn:hover { border-color: var(--text-muted); }
-.btn-fix { background: var(--fixed); border-color: var(--fixed); color: #08130c; font-weight: 700; }
-.btn-fix:hover { background: var(--fixed-text); border-color: var(--fixed-text); }
+.btn-fix { background: var(--fixed); border-color: var(--fixed); color: var(--btn-fix-text); font-weight: 700; }
+.btn-fix:hover { background: var(--btn-fix-hover); border-color: var(--btn-fix-hover); }
 
 /* ===== demo ===== */
 .demo-block { text-align: left; }
@@ -161,7 +259,7 @@ section { margin-top: 96px; }
   background: var(--bg-raised);
   outline: none;
 }
-.ime-demo:focus-visible, .ime-demo:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(130, 180, 255, 0.25); }
+.ime-demo:focus-visible, .ime-demo:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-ring); }
 .ime-demo-prompt {
   min-height: 2.6em;
   font-size: 14.5px;
@@ -172,7 +270,7 @@ section { margin-top: 96px; }
   border-radius: var(--radius);
 }
 .ime-hint-flash { animation: ime-flash 0.5s; }
-@keyframes ime-flash { 0% { background: #3d3320; } 100% { background: var(--bg); } }
+@keyframes ime-flash { 0% { background: var(--flash); } 100% { background: var(--bg); } }
 .ime-keystrip {
   display: flex;
   gap: 5px;
@@ -289,8 +387,8 @@ button.ime-key, button.ime-ctrl {
 }
 button.ime-key { border: 1px solid var(--border-strong); border-bottom-width: 4px; background: var(--bg); }
 button.ime-key:active { border-bottom-width: 1px; transform: translateY(3px); }
-button.ime-ctrl { border: 1px solid var(--accent); background: rgba(130, 180, 255, 0.12); color: var(--accent); }
-button.ime-ctrl:hover { background: rgba(130, 180, 255, 0.2); }
+button.ime-ctrl { border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); }
+button.ime-ctrl:hover { background: var(--accent-soft-hover); }
 .ime-demo-summary { margin-top: 10px; font-size: 14.5px; }
 .ime-demo-summary:not(:empty) {
   border-left: 3px solid var(--accent);
@@ -430,7 +528,7 @@ button.ime-ctrl:hover { background: rgba(130, 180, 255, 0.2); }
   padding: 10px;
   margin-bottom: 8px;
 }
-.ime-log-comp { color: #7fd4ff; }
+.ime-log-comp { color: var(--log-comp); }
 .ime-log-blocked { color: var(--warn); }
 .ime-log-submit { color: var(--broken-text); }
 
@@ -454,8 +552,18 @@ footer details summary { cursor: pointer; font-weight: 700; }
   .ime-cap { animation: none; }
 }
 </style>
+<script>
+/* apply a stored manual theme choice before first paint to avoid a flash */
+(function () {
+  try {
+    var t = localStorage.getItem("theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
+})();
+</script>
 </head>
 <body>
+<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch theme" hidden><span aria-hidden="true">☀️</span></button>
 <main>
 
 <!-- ===== hero ===== -->
@@ -476,32 +584,32 @@ footer details summary { cursor: pointer; font-weight: 700; }
       <span>live demo — no Japanese keyboard required</span>
       <span>goal: send <span lang="ja">「明日の会議は10時からです」</span> (“Tomorrow's meeting starts at 10”)</span>
     </div>
-    <div class="ime-demo" id="ime-demo" tabindex="0" aria-label="Interactive IME simulation demo">
+    <div class="ime-demo" id="ime-demo" tabindex="0" role="group" aria-label="Interactive IME simulation demo" aria-describedby="ime-demo-note">
       <div class="ime-demo-prompt"><span id="ime-demo-instruction" aria-live="polite">Press <strong>▶ Watch it happen</strong> below — or just start typing any letters; the simulated IME turns them into Japanese.</span></div>
       <div class="ime-keystrip" aria-hidden="true"><span class="ime-keystrip-label">keys</span><span id="ime-keystrip-caps" style="display:flex;gap:5px;"></span></div>
       <div class="ime-demo-panes">
         <div class="ime-pane ime-pane-broken">
           <div class="ime-pane-title"><span>✗ Broken form<span class="ime-pane-sub">sends on every Enter</span></span><span class="ime-pane-count" id="ime-count-broken">0 fragments</span></div>
-          <div class="ime-pane-messages" id="ime-msgs-broken" lang="ja"></div>
+          <div class="ime-pane-messages" id="ime-msgs-broken" lang="ja" role="log" aria-live="off" tabindex="0" aria-label="Messages received by the broken form"></div>
           <div class="ime-pane-inputrow"><div class="ime-pane-input" id="ime-input-broken" lang="ja"></div><div class="ime-pane-sendbtn">Send</div></div>
         </div>
         <div class="ime-pane ime-pane-fixed">
           <div class="ime-pane-title"><span>✓ Fixed form<span class="ime-pane-sub">checks isComposing</span></span><span class="ime-pane-count" id="ime-count-fixed">0 messages</span></div>
-          <div class="ime-pane-messages" id="ime-msgs-fixed" lang="ja"></div>
+          <div class="ime-pane-messages" id="ime-msgs-fixed" lang="ja" role="log" aria-live="off" tabindex="0" aria-label="Messages received by the fixed form"></div>
           <div class="ime-pane-inputrow"><div class="ime-pane-input" id="ime-input-fixed" lang="ja"></div><div class="ime-pane-sendbtn">Send</div></div>
         </div>
       </div>
       <div class="ime-demo-keys">
-        <button type="button" class="ime-key" id="ime-key-type">a b c …</button>
+        <button type="button" class="ime-key" id="ime-key-type" aria-label="Type letters">a b c …</button>
         <button type="button" class="ime-key" id="ime-key-space">Space</button>
         <button type="button" class="ime-key" id="ime-key-enter">Enter ⏎</button>
         <button type="button" class="ime-ctrl" id="ime-key-auto">▶ Watch it happen</button>
         <button type="button" class="ime-ctrl" id="ime-key-reset">↺ Reset</button>
       </div>
-      <div class="ime-demo-summary" id="ime-demo-summary"></div>
+      <div class="ime-demo-summary" id="ime-demo-summary" aria-live="polite"></div>
     </div>
     <noscript><p class="ime-smallprint">The interactive demo needs JavaScript — everything else on this page reads fine without it.</p></noscript>
-    <p class="ime-smallprint">Both panes receive the <em>same keystrokes</em>. The demo simulates the standard IME flow (type the reading → Space to convert → Enter to confirm). Real IMEs have more features, but the Enter step is exactly what breaks. And yes — the demo's own key handling uses the very <code>isComposing</code> check described below.</p>
+    <p class="ime-smallprint" id="ime-demo-note">Both panes receive the <em>same keystrokes</em>. The demo simulates the standard IME flow (type the reading → Space to convert → Enter to confirm). Real IMEs have more features, but the Enter step is exactly what breaks. And yes — the demo's own key handling uses the very <code>isComposing</code> check described below.</p>
   </div>
 </header>
 
@@ -576,8 +684,8 @@ footer details summary { cursor: pointer; font-weight: 700; }
   <h2 id="the-quick-fix-check-iscomposing">The fix: check <code>isComposing</code></h2>
   <p>The browser already knows when an IME conversion is in progress. You just need to ask:</p>
   <div class="code-card code-fix">
-    <button type="button" class="copy-btn">Copy</button>
-    <pre><code>element.addEventListener(<span class="tok-s">"keydown"</span>, (event) =&gt; {
+    <button type="button" class="copy-btn" aria-live="polite">Copy<span class="visually-hidden"> the fix code</span></button>
+    <pre tabindex="0"><code>element.addEventListener(<span class="tok-s">"keydown"</span>, (event) =&gt; {
   <span class="tok-k">if</span> (<span class="tok-hl">event.isComposing || event.keyCode === 229</span>) {
     <span class="tok-k">return</span>; <span class="tok-c">// IME is composing — this Enter is not for you</span>
   }
@@ -593,8 +701,8 @@ footer details summary { cursor: pointer; font-weight: 700; }
       <h4>React</h4>
       <p>Read the flag from the <em>native</em> event — the synthetic event may not expose <code>isComposing</code> directly:</p>
       <div class="code-card">
-        <button type="button" class="copy-btn">Copy</button>
-        <pre><code><span class="tok-k">const</span> onKeyDown = (e) =&gt; {
+        <button type="button" class="copy-btn" aria-live="polite">Copy<span class="visually-hidden"> the React example</span></button>
+        <pre tabindex="0"><code><span class="tok-k">const</span> onKeyDown = (e) =&gt; {
   <span class="tok-k">if</span> (<span class="tok-hl">e.nativeEvent.isComposing || e.keyCode === 229</span>) <span class="tok-k">return</span>;
   <span class="tok-k">if</span> (e.key === <span class="tok-s">"Enter"</span> &amp;&amp; !e.shiftKey) {
     e.preventDefault();
@@ -607,8 +715,8 @@ footer details summary { cursor: pointer; font-weight: 700; }
       <h4>Vue</h4>
       <p><code>v-model</code> already waits for composition to finish before updating your data — but that does <em>not</em> protect your own <code>@keydown.enter</code> handler. Check the event yourself:</p>
       <div class="code-card">
-        <button type="button" class="copy-btn">Copy</button>
-        <pre><code>&lt;textarea @keydown.enter=<span class="tok-s">"onEnter"</span>&gt;&lt;/textarea&gt;
+        <button type="button" class="copy-btn" aria-live="polite">Copy<span class="visually-hidden"> the Vue example</span></button>
+        <pre tabindex="0"><code>&lt;textarea @keydown.enter=<span class="tok-s">"onEnter"</span>&gt;&lt;/textarea&gt;
 
 onEnter(e) {
   <span class="tok-k">if</span> (<span class="tok-hl">e.isComposing || e.keyCode === 229</span>) <span class="tok-k">return</span>;
@@ -642,8 +750,9 @@ onEnter(e) {
   <div class="ime-inspector-body">
     <h3>Live event inspector</h3>
     <p>Type below with an IME active and watch <code>keydown</code> and <code>compositionstart</code>/<code>update</code>/<code>end</code> fire — including what the fix would do with each Enter. Without an IME you'll still see <code>keydown</code> events; <code>isComposing</code> just stays <code>false</code>.</p>
+    <label class="visually-hidden" for="ime-inspector-input">Type here to inspect keyboard and composition events</label>
     <textarea id="ime-inspector-input" rows="2" placeholder="Type here (with an IME if you have one)…"></textarea>
-    <div class="ime-inspector-log" id="ime-inspector-log" aria-live="off"></div>
+    <div class="ime-inspector-log" id="ime-inspector-log" role="log" aria-live="off" tabindex="0" aria-label="Event log"></div>
     <button type="button" class="ime-ctrl" id="ime-inspector-clear">Clear log</button>
   </div>
 </section>
@@ -654,12 +763,12 @@ onEnter(e) {
   <h2>Found this bug in someone else's product?</h2>
   <p>This page exists to be linked. Paste it into a bug report so the developer on the other end can see the problem, feel it in the demo, and grab the fix — no long explanation needed on your side.</p>
   <div class="spread-actions">
-    <button type="button" class="btn" id="copy-page-link">Copy page link</button>
+    <button type="button" class="btn" id="copy-page-link" aria-live="polite">Copy page link</button>
   </div>
   <p>Or start from this report template:</p>
   <div class="code-card">
-    <button type="button" class="copy-btn">Copy</button>
-    <pre id="issue-template"><code>Title: Form submits while an IME is composing (Japanese/Chinese/Korean input)
+    <button type="button" class="copy-btn" aria-live="polite">Copy<span class="visually-hidden"> the bug report template</span></button>
+    <pre id="issue-template" tabindex="0"><code>Title: Form submits while an IME is composing (Japanese/Chinese/Korean input)
 
 Steps to reproduce:
 1. Enable a Japanese IME (every OS ships one).
@@ -688,13 +797,14 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
   <details>
     <summary>Version history</summary>
     <ul>
+      <li><strong>2026-07-17</strong> — Added a light theme (follows your system setting, with a manual toggle) and an accessibility pass: keyboard-navigable code tabs, focusable scrollable regions, uniquely named copy buttons, a labeled inspector field, stronger control borders, and quieter screen-reader announcements during the demo's auto-play.</li>
       <li><strong>2026-07-17</strong> — Full redesign as a standalone static page: dark broken-vs-fixed theme, the split demo promoted to the hero with auto-play, a keystroke visualizer and live counters, framework code tabs with copy buttons, and a copy-paste bug report template.</li>
       <li><strong>2026-07-16</strong> — Added an interactive demo that simulates IME typing (no IME needed), a live event inspector, framework notes for React and Vue, steps for testing with a real IME, and a note on why custom keydown handlers (not plain forms) are where this bug lives.</li>
       <li><strong>2026-04-17</strong> — Added <code>isComposing</code> code example and Safari fallback explanation. Expanded scope to cover Chinese and Korean IME. Replaced dead W3C link with MDN references. Added concrete examples for chat interfaces and AI generation tools.</li>
       <li><strong>2024-03-17</strong> — Initial publication.</li>
     </ul>
   </details>
-  <p class="author-line"><span id="author">Kairin — <a href="https://x.com/ckrunch">X</a></span> · <a href="https://github.com/kai-rin/your-form-submits-mid-japanese-input">Source on GitHub</a></p>
+  <p class="author-line"><span id="author">Kairin — <a href="https://x.com/ckrunch" aria-label="Kairin on X">X</a></span> · <a href="https://github.com/kai-rin/your-form-submits-mid-japanese-input">Source on GitHub</a></p>
 </footer>
 
 </main>
@@ -889,11 +999,16 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
       timer = null;
     }
     el.keyAuto.textContent = "▶ Watch it happen";
+    /* re-enable announcements muted during auto-play */
+    el.instruction.setAttribute("aria-live", "polite");
   }
 
   function autoPlay() {
     if (timer) { stopAuto(); return; }
     reset();
+    /* mute the live region during auto-play — instructions change every few
+       keystrokes and would flood screen readers; the end state is announced */
+    el.instruction.setAttribute("aria-live", "off");
     el.keyAuto.textContent = "⏸ Stop";
     var queue = [];
     CHUNKS.forEach(function (c) {
@@ -997,33 +1112,54 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
     var bar = document.createElement("div");
     bar.className = "tabbar";
     bar.setAttribute("role", "tablist");
+    bar.setAttribute("aria-label", "Framework code examples");
     var buttons = panels.map(function (panel, i) {
       var btn = document.createElement("button");
+      var label = panel.getAttribute("data-label") || ("Tab " + (i + 1));
+      var slug = label.toLowerCase().replace(/[^a-z0-9]+/g, "-");
       btn.type = "button";
       btn.setAttribute("role", "tab");
-      btn.textContent = panel.getAttribute("data-label") || ("Tab " + (i + 1));
-      btn.addEventListener("click", function () { select(i); });
+      btn.id = "code-tab-" + slug;
+      btn.textContent = label;
+      btn.addEventListener("click", function () { select(i, false); });
       bar.appendChild(btn);
+      if (!panel.id) panel.id = "code-panel-" + slug;
       panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", btn.id);
+      btn.setAttribute("aria-controls", panel.id);
       return btn;
     });
-    function select(idx) {
+    function select(idx, focus) {
       panels.forEach(function (panel, i) {
         panel.hidden = i !== idx;
         buttons[i].setAttribute("aria-selected", i === idx ? "true" : "false");
+        buttons[i].tabIndex = i === idx ? 0 : -1;
       });
+      if (focus) buttons[idx].focus();
     }
+    bar.addEventListener("keydown", function (e) {
+      var idx = buttons.indexOf(document.activeElement);
+      if (idx < 0) return;
+      var next = null;
+      if (e.key === "ArrowRight") next = (idx + 1) % buttons.length;
+      else if (e.key === "ArrowLeft") next = (idx - 1 + buttons.length) % buttons.length;
+      else if (e.key === "Home") next = 0;
+      else if (e.key === "End") next = buttons.length - 1;
+      if (next !== null) { e.preventDefault(); select(next, true); }
+    });
     tabs.insertBefore(bar, tabs.firstChild);
     tabs.classList.add("tabs-on");
-    select(0);
+    select(0, false);
   });
 
   function flash(btn, ok) {
-    var old = btn.textContent;
+    /* restore innerHTML, not textContent — copy buttons carry a
+       visually-hidden span that makes their accessible names unique */
+    var old = btn.innerHTML;
     btn.textContent = ok ? "Copied ✓" : "Copy failed";
     btn.classList.toggle("copied", ok);
     setTimeout(function () {
-      btn.textContent = old;
+      btn.innerHTML = old;
       btn.classList.remove("copied");
     }, 1600);
   }
@@ -1058,6 +1194,43 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
       copyText("https://kai-rin.github.io/your-form-submits-mid-japanese-input/", linkBtn);
     });
   }
+})();
+
+/* ===== theme toggle ===== */
+(function () {
+  "use strict";
+  var btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  var root = document.documentElement;
+  var icon = btn.querySelector("span");
+  var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: light)") : null;
+  function current() {
+    var forced = root.getAttribute("data-theme");
+    if (forced === "light" || forced === "dark") return forced;
+    return mq && mq.matches ? "light" : "dark";
+  }
+  function sync() {
+    var t = current();
+    btn.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+    icon.textContent = t === "dark" ? "☀️" : "🌙";
+    /* with a forced theme the media-qualified theme-color metas may disagree
+       with the page — pin both to the active background color */
+    if (root.getAttribute("data-theme")) {
+      var color = t === "light" ? "#faf9f7" : "#14161b";
+      document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+        m.setAttribute("content", color);
+      });
+    }
+  }
+  btn.addEventListener("click", function () {
+    var next = current() === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    sync();
+  });
+  if (mq && mq.addEventListener) mq.addEventListener("change", sync);
+  btn.hidden = false;
+  sync();
 })();
 </script>
 </body>
