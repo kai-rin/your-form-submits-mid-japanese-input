@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Form Submits Mid-Japanese Input</title>
+<meta name="description" content="A static site to link people to when their web form submits upon the user confirming their IME input.">
+<link rel="canonical" href="https://kai-rin.github.io/your-form-submits-mid-japanese-input/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Your Form Submits Mid-Japanese Input">
+<meta property="og:description" content="A static site to link people to when their web form submits upon the user confirming their IME input.">
+<meta property="og:url" content="https://kai-rin.github.io/your-form-submits-mid-japanese-input/">
+<meta property="og:image" content="https://kai-rin.github.io/your-form-submits-mid-japanese-input/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14161b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌨️</text></svg>">
+<style>
+/* ===== tokens ===== */
+:root {
+  color-scheme: dark;
+  --bg: #14161b;
+  --bg-raised: #1c1f26;
+  --bg-inset: #0c0e11;
+  --border: #2e323b;
+  --border-strong: #454b57;
+  --text: #edebe6;
+  --text-muted: #a6acb8;
+  --broken: #ff5c47;
+  --broken-text: #ffa294;
+  --broken-bg: #2a1512;
+  --broken-border: #71362c;
+  --fixed: #3dc878;
+  --fixed-text: #8fe3b4;
+  --fixed-bg: #10291c;
+  --fixed-border: #29593f;
+  --accent: #82b4ff;
+  --candidate-bg: #23406b;
+  --warn: #e3c078;
+  --font-sans: system-ui, "Segoe UI", -apple-system, "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", Consolas, Menlo, monospace;
+  --font-ja: "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", Meiryo, system-ui, sans-serif;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+/* ===== base ===== */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-text-size-adjust: 100%;
+}
+::selection { background: var(--candidate-bg); color: var(--text); }
+[id] { scroll-margin-top: 28px; }
+.anchor-alias { position: absolute; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+[lang="ja"] { font-family: var(--font-ja); line-height: 1.7; }
+code, kbd, pre { font-family: var(--font-mono); font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+code { font-size: 0.88em; background: var(--bg-raised); border: 1px solid var(--border); border-radius: 5px; padding: 1px 5px; }
+pre code { background: none; border: none; padding: 0; font-size: inherit; }
+kbd {
+  font-size: 12.5px;
+  padding: 2px 8px;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  background: var(--bg-raised);
+  white-space: nowrap;
+}
+h1, h2, h3, h4 { line-height: 1.25; letter-spacing: -0.01em; }
+h2 { font-size: 1.7rem; font-weight: 800; margin: 0.4rem 0 1rem; }
+h3 { font-size: 1.18rem; font-weight: 700; margin: 2.2rem 0 0.7rem; }
+p, ul, ol { margin: 0 0 1rem; }
+li { margin-bottom: 0.4rem; }
+strong { font-weight: 700; }
+
+main { width: min(720px, 92vw); margin: 0 auto; }
+.wide { width: min(960px, 94vw); margin-left: calc((min(960px, 94vw) - 100%) / -2); }
+section { margin-top: 96px; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+.eyebrow::before { content: "// "; color: var(--border-strong); }
+
+/* ===== hero ===== */
+.hero { padding-top: 72px; text-align: center; }
+.hero h1 {
+  font-size: clamp(2rem, 5.6vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0.6rem auto 1rem;
+  max-width: 21ch;
+}
+.hero h1 .composing {
+  text-decoration: underline dotted var(--accent) 3px;
+  text-underline-offset: 8px;
+  text-decoration-skip-ink: none;
+}
+.hero-tagline {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 52ch;
+  margin: 0 auto 0.8rem;
+}
+.hero-tagline .t-broken { color: var(--broken-text); font-weight: 600; }
+.hero-tagline .t-fixed { color: var(--fixed-text); font-weight: 600; }
+.hero-why {
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  max-width: 60ch;
+  margin: 0 auto 2rem;
+}
+.hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+.btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  cursor: pointer;
+  background: var(--bg-raised);
+}
+.btn:hover { border-color: var(--text-muted); }
+.btn-fix { background: var(--fixed); border-color: var(--fixed); color: #08130c; font-weight: 700; }
+.btn-fix:hover { background: var(--fixed-text); border-color: var(--fixed-text); }
+
+/* ===== demo ===== */
+.demo-block { text-align: left; }
+.demo-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ime-demo {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  background: var(--bg-raised);
+  outline: none;
+}
+.ime-demo:focus-visible, .ime-demo:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(130, 180, 255, 0.25); }
+.ime-demo-prompt {
+  min-height: 2.6em;
+  font-size: 14.5px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.ime-hint-flash { animation: ime-flash 0.5s; }
+@keyframes ime-flash { 0% { background: #3d3320; } 100% { background: var(--bg); } }
+.ime-keystrip {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  min-height: 34px;
+  margin-bottom: 10px;
+  padding: 4px 8px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+.ime-keystrip-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 4px; flex-shrink: 0; }
+.ime-cap {
+  font-size: 12px;
+  padding: 2px 7px;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 3px;
+  border-radius: 5px;
+  background: var(--bg-raised);
+  white-space: nowrap;
+  animation: ime-cap-pop 0.18s;
+}
+@keyframes ime-cap-pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.ime-cap-space { color: var(--accent); }
+.ime-cap-enter { color: var(--warn); font-weight: 700; }
+.ime-demo-panes { display: flex; gap: 12px; flex-wrap: wrap; }
+.ime-pane {
+  flex: 1 1 240px;
+  min-width: 220px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.ime-pane-broken { border-top: 3px solid var(--broken); }
+.ime-pane-fixed { border-top: 3px solid var(--fixed); }
+.ime-pane-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.ime-pane-broken .ime-pane-title { color: var(--broken-text); }
+.ime-pane-fixed .ime-pane-title { color: var(--fixed-text); }
+.ime-pane-sub { display: block; font-weight: 400; font-size: 11.5px; color: var(--text-muted); }
+.ime-pane-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+.ime-pane-messages {
+  flex: 1;
+  min-height: 150px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ime-empty { color: var(--text-muted); font-size: 12.5px; text-align: center; margin: auto; }
+.ime-bubble { align-self: flex-end; max-width: 90%; border-radius: 12px 12px 2px 12px; padding: 6px 10px; font-size: 14.5px; }
+.ime-bubble-premature { background: var(--broken-bg); border: 1px solid var(--broken-border); }
+.ime-bubble-ok { background: var(--fixed-bg); border: 1px solid var(--fixed-border); }
+.ime-badge { font-size: 10.5px; margin-top: 2px; font-family: var(--font-mono); }
+.ime-bubble-premature .ime-badge { color: var(--broken-text); }
+.ime-bubble-ok .ime-badge { color: var(--fixed-text); }
+.ime-sysline { align-self: center; color: var(--text-muted); font-size: 11.5px; font-style: italic; text-align: center; }
+.ime-pane-inputrow { display: flex; gap: 6px; border-top: 1px solid var(--border); padding: 8px; align-items: center; }
+.ime-pane-input {
+  flex: 1;
+  min-height: 1.6em;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+  font-size: 14.5px;
+  background: var(--bg-inset);
+  overflow-wrap: anywhere;
+}
+.ime-composing { border-bottom: 2px dotted var(--text); }
+.ime-converted { background: var(--candidate-bg); }
+.ime-placeholder { color: var(--text-muted); font-size: 12.5px; }
+::placeholder { color: var(--text-muted); opacity: 1; }
+.ime-pane-sendbtn {
+  font-size: 12.5px;
+  font-family: var(--font-mono);
+  background: var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 5px 11px;
+  user-select: none;
+}
+.ime-demo-keys { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+button.ime-key, button.ime-ctrl {
+  font-size: 13.5px;
+  font-family: var(--font-mono);
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--text);
+}
+button.ime-key { border: 1px solid var(--border-strong); border-bottom-width: 4px; background: var(--bg); }
+button.ime-key:active { border-bottom-width: 1px; transform: translateY(3px); }
+button.ime-ctrl { border: 1px solid var(--accent); background: rgba(130, 180, 255, 0.12); color: var(--accent); }
+button.ime-ctrl:hover { background: rgba(130, 180, 255, 0.2); }
+.ime-demo-summary { margin-top: 10px; font-size: 14.5px; }
+.ime-demo-summary:not(:empty) {
+  border-left: 3px solid var(--accent);
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.ime-smallprint { font-size: 13px; color: var(--text-muted); margin-top: 10px; }
+
+/* ===== stats ===== */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 1.4rem 0 0.6rem; }
+.stat-card { background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 20px; }
+.stat-num { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+.stat-label { font-size: 13.5px; color: var(--text-muted); margin-top: 6px; }
+.stat-foot { font-size: 12.5px; color: var(--text-muted); margin-bottom: 2rem; }
+
+/* ===== shredded chat mock ===== */
+.shred {
+  border: 1px solid var(--broken-border);
+  border-top: 3px solid var(--broken);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  padding: 14px;
+  max-width: 440px;
+  margin: 1.4rem auto 0.5rem;
+}
+.shred-title { font-family: var(--font-mono); font-size: 12px; color: var(--broken-text); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+.shred-msgs { display: flex; flex-direction: column; gap: 6px; }
+.shred-caption { font-size: 13.5px; color: var(--text-muted); text-align: center; margin-bottom: 2rem; }
+
+/* ===== keystroke flow (§2) ===== */
+.flow { margin: 1.6rem 0; border-left: 2px solid var(--border); padding-left: 22px; display: flex; flex-direction: column; gap: 20px; }
+.flow-step { position: relative; }
+.flow-step::before {
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+.flow-tag { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); }
+.flow-keys { margin: 6px 0; display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.ja-sample { font-size: 1.5rem; }
+.flow-note { font-size: 14.5px; color: var(--text-muted); margin-top: 4px; }
+.verdict { display: flex; gap: 12px; flex-wrap: wrap; margin: 1.6rem 0; }
+.verdict-chip { flex: 1 1 240px; border-radius: var(--radius-lg); padding: 14px 16px; font-size: 15px; }
+.verdict-user { background: var(--fixed-bg); border: 1px solid var(--fixed-border); }
+.verdict-form { background: var(--broken-bg); border: 1px solid var(--broken-border); }
+.verdict-chip .v-head { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+.verdict-user .v-head { color: var(--fixed-text); }
+.verdict-form .v-head { color: var(--broken-text); }
+
+/* ===== code ===== */
+.code-card { position: relative; margin: 1.2rem 0; }
+.code-card pre {
+  margin: 0;
+  padding: 16px 18px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  font-size: 13.5px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+.code-fix pre { border-color: var(--fixed-border); border-top: 3px solid var(--fixed); }
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--text-muted); }
+.copy-btn.copied { color: var(--fixed-text); border-color: var(--fixed-border); }
+.tok-c { color: var(--text-muted); }
+.tok-k { color: var(--accent); }
+.tok-s { color: var(--warn); }
+.tok-hl { background: var(--candidate-bg); border-radius: 3px; padding: 1px 2px; }
+.tabbar { display: flex; gap: 6px; margin-bottom: 10px; }
+.tabbar button {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 7px 16px;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.tabbar button[aria-selected="true"] { background: var(--bg-inset); color: var(--text); border-color: var(--border-strong); font-weight: 700; }
+.code-panel > h4 { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); margin: 1.4rem 0 0.4rem; }
+.tabs-on .code-panel > h4 { display: none; }
+.tabs-on .code-panel[hidden] { display: none; }
+.callout {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+  padding: 12px 16px;
+  margin: 1.2rem 0;
+  font-size: 15.5px;
+}
+
+/* ===== inspector ===== */
+.ime-inspector-body textarea {
+  width: 100%;
+  font-size: 15px;
+  font-family: var(--font-sans);
+  padding: 8px 10px;
+  margin: 8px 0 6px;
+  background: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+.ime-inspector-log {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  white-space: pre;
+  overflow: auto;
+  max-height: 240px;
+  min-height: 90px;
+  background: var(--bg-inset);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.ime-log-comp { color: #7fd4ff; }
+.ime-log-blocked { color: var(--warn); }
+.ime-log-submit { color: var(--broken-text); }
+
+/* ===== spread ===== */
+.spread-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 1.2rem 0; }
+
+/* ===== footer ===== */
+footer { margin-top: 110px; border-top: 1px solid var(--border); padding: 40px 0 60px; font-size: 15px; }
+footer h2 { font-size: 1.1rem; margin-top: 2rem; }
+footer details summary { cursor: pointer; font-weight: 700; }
+.author-line { color: var(--text-muted); margin-top: 2.5rem; font-size: 14px; }
+
+@media (max-width: 640px) {
+  section { margin-top: 68px; }
+  .hero { padding-top: 44px; }
+  .ja-sample { font-size: 1.3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ime-hint-flash { animation: none; }
+  .ime-cap { animation: none; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<!-- ===== hero ===== -->
+<header class="hero">
+  <p class="eyebrow">the bug, live</p>
+  <h1>Your Form Submits <span class="composing">Mid&#8288;-&#8288;Japanese Input</span></h1>
+  <p class="hero-tagline">Your users press Enter to <span class="t-fixed">finish typing a word</span>.
+  Your form thinks they pressed <span class="t-broken">Send</span>.
+  One <code>if</code> statement fixes it.</p>
+  <p class="hero-why"><span class="anchor-alias" id="why-am-i-here"></span>Someone sent you this link? Then a form you maintain probably fires on the Enter key that Japanese, Chinese, and Korean users press to build words — before they can finish a sentence. Five minutes here and you'll see it, understand it, and fix it.</p>
+  <div class="hero-ctas">
+    <a class="btn btn-fix" href="#the-quick-fix-check-iscomposing">Get the fix ↓</a>
+    <a class="btn" href="#whats-the-problem">See why it happens</a>
+  </div>
+
+  <div class="demo-block wide" id="see-the-bug-for-yourself">
+    <div class="demo-label">
+      <span>live demo — no Japanese keyboard required</span>
+      <span>goal: send <span lang="ja">「明日の会議は10時からです」</span> (“Tomorrow's meeting starts at 10”)</span>
+    </div>
+    <div class="ime-demo" id="ime-demo" tabindex="0" aria-label="Interactive IME simulation demo">
+      <div class="ime-demo-prompt"><span id="ime-demo-instruction" aria-live="polite">Press <strong>▶ Watch it happen</strong> below — or just start typing any letters; the simulated IME turns them into Japanese.</span></div>
+      <div class="ime-keystrip" aria-hidden="true"><span class="ime-keystrip-label">keys</span><span id="ime-keystrip-caps" style="display:flex;gap:5px;"></span></div>
+      <div class="ime-demo-panes">
+        <div class="ime-pane ime-pane-broken">
+          <div class="ime-pane-title"><span>✗ Broken form<span class="ime-pane-sub">sends on every Enter</span></span><span class="ime-pane-count" id="ime-count-broken">0 fragments</span></div>
+          <div class="ime-pane-messages" id="ime-msgs-broken" lang="ja"></div>
+          <div class="ime-pane-inputrow"><div class="ime-pane-input" id="ime-input-broken" lang="ja"></div><div class="ime-pane-sendbtn">Send</div></div>
+        </div>
+        <div class="ime-pane ime-pane-fixed">
+          <div class="ime-pane-title"><span>✓ Fixed form<span class="ime-pane-sub">checks isComposing</span></span><span class="ime-pane-count" id="ime-count-fixed">0 messages</span></div>
+          <div class="ime-pane-messages" id="ime-msgs-fixed" lang="ja"></div>
+          <div class="ime-pane-inputrow"><div class="ime-pane-input" id="ime-input-fixed" lang="ja"></div><div class="ime-pane-sendbtn">Send</div></div>
+        </div>
+      </div>
+      <div class="ime-demo-keys">
+        <button type="button" class="ime-key" id="ime-key-type">a b c …</button>
+        <button type="button" class="ime-key" id="ime-key-space">Space</button>
+        <button type="button" class="ime-key" id="ime-key-enter">Enter ⏎</button>
+        <button type="button" class="ime-ctrl" id="ime-key-auto">▶ Watch it happen</button>
+        <button type="button" class="ime-ctrl" id="ime-key-reset">↺ Reset</button>
+      </div>
+      <div class="ime-demo-summary" id="ime-demo-summary"></div>
+    </div>
+    <noscript><p class="ime-smallprint">The interactive demo needs JavaScript — everything else on this page reads fine without it.</p></noscript>
+    <p class="ime-smallprint">Both panes receive the <em>same keystrokes</em>. The demo simulates the standard IME flow (type the reading → Space to convert → Enter to confirm). Real IMEs have more features, but the Enter step is exactly what breaks. And yes — the demo's own key handling uses the very <code>isComposing</code> check described below.</p>
+  </div>
+</header>
+
+<!-- ===== scale ===== -->
+<section id="is-it-a-big-deal-the-form-still-submits-right">
+  <p class="eyebrow">the scale</p>
+  <h2>This isn't an edge case</h2>
+  <p>Every Chinese, Japanese, and Korean sentence typed on the web goes through an IME — an input method editor that turns keystrokes into characters through a <em>compose → convert → confirm</em> cycle. The confirm step is the Enter key.</p>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-num">1.5B+</div><div class="stat-label">people are online in a language that requires an IME</div></div>
+    <div class="stat-card"><div class="stat-num">≈ 1 in 5</div><div class="stat-label">of all internet users worldwide type through a composition step</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">user-side workarounds — the IME needs Enter; only your code can tell “confirm” from “send”</div></div>
+  </div>
+  <p class="stat-foot">Rough math: internet users in China (~1.1B), Japan (~100M), and South Korea (~50M), plus Chinese, Japanese, and Korean speakers everywhere else.</p>
+  <p>On a broken form, a user trying to send <span lang="ja">「明日の会議は10時からです」</span> (<em>Tomorrow's meeting starts at 10</em>) never gets past the first phrase. Their message leaves in shreds:</p>
+  <div class="shred" role="img" aria-label="A chat window showing one sentence accidentally sent as four separate fragments">
+    <div class="shred-title">what the other side receives</div>
+    <div class="shred-msgs">
+      <div class="ime-bubble ime-bubble-premature">Tomorrow's<div class="ime-badge">✗ sent mid-sentence</div></div>
+      <div class="ime-bubble ime-bubble-premature">meeting<div class="ime-badge">✗ sent mid-sentence</div></div>
+      <div class="ime-bubble ime-bubble-premature">starts at<div class="ime-badge">✗ sent mid-sentence</div></div>
+      <div class="ime-bubble ime-bubble-premature">10<div class="ime-badge">✗ sent mid-sentence</div></div>
+    </div>
+  </div>
+  <p class="shred-caption">Now imagine deleting and apologizing for each of these, in every conversation, every day.</p>
+  <p>It hurts most in exactly the interfaces that bind Enter to “go”:</p>
+  <ul>
+    <li><strong>Chat interfaces</strong> — messaging apps, support widgets, AI assistants. Every confirm-Enter fires a fragment. The user has to delete or explain each accidental message — assuming your app even allows that.</li>
+    <li><strong>AI generation tools</strong> — image, video, and code generators. Half a prompt kicks off a generation the user never wanted. They wait for a result they didn't ask for, or burn credits canceling it.</li>
+  </ul>
+</section>
+
+<!-- ===== mechanism ===== -->
+<section id="whats-the-problem">
+  <p class="eyebrow">the mechanism</p>
+  <h2>What the IME is doing when Enter “misfires”</h2>
+  <p>Here's what typing <span lang="ja">明日</span> (<em>asu</em>, “tomorrow”) actually looks like. Watch where Enter shows up:</p>
+  <div class="flow">
+    <div class="flow-step">
+      <span class="flow-tag">1 · compose</span>
+      <div class="flow-keys"><kbd>a</kbd><kbd>s</kbd><kbd>u</kbd></div>
+      <div class="ja-sample" lang="ja"><span class="ime-composing">あす</span></div>
+      <p class="flow-note">The IME converts keystrokes to kana in real time. The dotted underline means: still composing, nothing final yet.</p>
+    </div>
+    <div class="flow-step">
+      <span class="flow-tag">2 · convert</span>
+      <div class="flow-keys"><kbd>Space</kbd></div>
+      <div class="ja-sample" lang="ja"><span class="ime-converted">明日</span></div>
+      <p class="flow-note">Space asks the IME for candidates. The highlight means: this is a suggestion, pick or confirm it.</p>
+    </div>
+    <div class="flow-step">
+      <span class="flow-tag">3 · confirm</span>
+      <div class="flow-keys"><kbd>Enter ⏎</kbd></div>
+      <div class="ja-sample" lang="ja">明日</div>
+      <p class="flow-note">Enter means <strong>“yes, this is the text I want.”</strong> The user is mid-sentence. They have not asked you to do anything yet.</p>
+    </div>
+  </div>
+  <div class="verdict">
+    <div class="verdict-chip verdict-user"><span class="v-head">✓ what the user meant</span>Confirm this word, then keep typing.</div>
+    <div class="verdict-chip verdict-form"><span class="v-head">✗ what the broken form heard</span><code>key === "Enter"</code> → submit. Message gone.</div>
+  </div>
+  <p><span class="anchor-alias" id="what-about-other-languages"></span>Japanese is the headline example, but Chinese (Pinyin, Zhuyin) and Korean (Hangul) input run the same compose-and-confirm loop, and some European dead-key and handwriting inputs compose too. One fix covers all of them.</p>
+
+  <h3 id="doesnt-the-browser-handle-this-already">The bug lives in <em>your</em> keydown handler</h3>
+  <p>For a plain <code>&lt;form&gt;</code> with no JavaScript, modern browsers mostly get this right: the confirming Enter is treated as part of the IME interaction and doesn't trigger implicit submission. (Some browsers historically got it wrong, which is how this bug became folklore among IME users.)</p>
+  <p>The problem is custom key handling. <code>keydown</code> fires during composition <em>by design</em>, so pages can react to typing. The moment your code says <code>if (event.key === "Enter") send()</code>, you've recreated the bug — that condition cannot tell a confirming Enter from a sending Enter. Chat boxes, Enter-to-search fields, comment forms, custom autocomplete widgets: anywhere JavaScript listens for Enter is where IME users get burned.</p>
+</section>
+
+<!-- ===== fix ===== -->
+<section id="how-can-we-fix-it">
+  <p class="eyebrow">the fix</p>
+  <h2 id="the-quick-fix-check-iscomposing">The fix: check <code>isComposing</code></h2>
+  <p>The browser already knows when an IME conversion is in progress. You just need to ask:</p>
+  <div class="code-card code-fix">
+    <button type="button" class="copy-btn">Copy</button>
+    <pre><code>element.addEventListener(<span class="tok-s">"keydown"</span>, (event) =&gt; {
+  <span class="tok-k">if</span> (<span class="tok-hl">event.isComposing || event.keyCode === 229</span>) {
+    <span class="tok-k">return</span>; <span class="tok-c">// IME is composing — this Enter is not for you</span>
+  }
+  <span class="tok-c">// handle Enter for form submission here</span>
+});</code></pre>
+  </div>
+  <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/isComposing"><code>event.isComposing</code></a> is <code>true</code> whenever the user is mid-composition. The <code>keyCode === 229</code> check is a fallback for Safari, which fires <code>compositionend</code> <em>before</em> <code>keydown</code> — so <code>isComposing</code> is already <code>false</code> when the keydown arrives. The dual check is <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event#keydown_events_with_ime">recommended by MDN</a> and works in all modern browsers (Chrome 56+, Firefox 31+, Safari 10.1+, Edge 79+).</p>
+
+  <h3 id="using-react-vue-or-another-framework">Using React, Vue, or another framework?</h3>
+  <p>Same check, different place to find the event object:</p>
+  <div class="code-tabs">
+    <div class="code-panel" data-label="React">
+      <h4>React</h4>
+      <p>Read the flag from the <em>native</em> event — the synthetic event may not expose <code>isComposing</code> directly:</p>
+      <div class="code-card">
+        <button type="button" class="copy-btn">Copy</button>
+        <pre><code><span class="tok-k">const</span> onKeyDown = (e) =&gt; {
+  <span class="tok-k">if</span> (<span class="tok-hl">e.nativeEvent.isComposing || e.keyCode === 229</span>) <span class="tok-k">return</span>;
+  <span class="tok-k">if</span> (e.key === <span class="tok-s">"Enter"</span> &amp;&amp; !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+};</code></pre>
+      </div>
+    </div>
+    <div class="code-panel" data-label="Vue">
+      <h4>Vue</h4>
+      <p><code>v-model</code> already waits for composition to finish before updating your data — but that does <em>not</em> protect your own <code>@keydown.enter</code> handler. Check the event yourself:</p>
+      <div class="code-card">
+        <button type="button" class="copy-btn">Copy</button>
+        <pre><code>&lt;textarea @keydown.enter=<span class="tok-s">"onEnter"</span>&gt;&lt;/textarea&gt;
+
+onEnter(e) {
+  <span class="tok-k">if</span> (<span class="tok-hl">e.isComposing || e.keyCode === 229</span>) <span class="tok-k">return</span>;
+  e.preventDefault();
+  <span class="tok-k">this</span>.send();
+}</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="alternative-change-how-submission-works">Or design the problem away</h3>
+  <p>Some forms sidestep the whole thing:</p>
+  <ul>
+    <li><strong>Submit button only</strong> — don't bind Enter to submission at all.</li>
+    <li><strong>Ctrl+Enter (Cmd+Enter on macOS) to send</strong> — a deliberate modifier combination never collides with IME confirmation. Enter handles line breaks and composing; the modifier sends.</li>
+  </ul>
+  <div class="callout"><strong>The rule:</strong> never let a bare Enter keypress trigger submission without checking whether the user is composing text.</div>
+</section>
+
+<!-- ===== proof ===== -->
+<section id="how-to-test-it-with-a-real-ime">
+  <p class="eyebrow">the proof</p>
+  <h2>Test it with a real IME — no Japanese required</h2>
+  <p>Every major OS ships an IME for free, and you don't need to know a word of Japanese:</p>
+  <ol>
+    <li>Add a Japanese input method in your OS settings (Windows: “Microsoft IME”; macOS: “Japanese — Romaji”; Linux: ibus/fcitx with mozc).</li>
+    <li>Switch to it in your form's text field and type <code>konnichiha</code> — you'll see <span lang="ja">こんにちは</span> composing with an underline.</li>
+    <li>Press Space (it becomes <span lang="ja">今日は</span> or <span lang="ja">こんにちは</span>), then press Enter to confirm.</li>
+    <li>If your form submitted on that Enter, you have this bug.</li>
+  </ol>
+  <div class="ime-inspector-body">
+    <h3>Live event inspector</h3>
+    <p>Type below with an IME active and watch <code>keydown</code> and <code>compositionstart</code>/<code>update</code>/<code>end</code> fire — including what the fix would do with each Enter. Without an IME you'll still see <code>keydown</code> events; <code>isComposing</code> just stays <code>false</code>.</p>
+    <textarea id="ime-inspector-input" rows="2" placeholder="Type here (with an IME if you have one)…"></textarea>
+    <div class="ime-inspector-log" id="ime-inspector-log" aria-live="off"></div>
+    <button type="button" class="ime-ctrl" id="ime-inspector-clear">Clear log</button>
+  </div>
+</section>
+
+<!-- ===== spread ===== -->
+<section id="found-this-bug">
+  <p class="eyebrow">pass it on</p>
+  <h2>Found this bug in someone else's product?</h2>
+  <p>This page exists to be linked. Paste it into a bug report so the developer on the other end can see the problem, feel it in the demo, and grab the fix — no long explanation needed on your side.</p>
+  <div class="spread-actions">
+    <button type="button" class="btn" id="copy-page-link">Copy page link</button>
+  </div>
+  <p>Or start from this report template:</p>
+  <div class="code-card">
+    <button type="button" class="copy-btn">Copy</button>
+    <pre id="issue-template"><code>Title: Form submits while an IME is composing (Japanese/Chinese/Korean input)
+
+Steps to reproduce:
+1. Enable a Japanese IME (every OS ships one).
+2. Type "konnichiha" into the affected field.
+3. Press Space to convert, then Enter to confirm the conversion.
+
+Expected: the text is confirmed; nothing is sent.
+Actual: the form submits a half-finished message.
+
+Fix (one line): ignore keydown events where
+`event.isComposing || event.keyCode === 229` is true.
+
+Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input/</code></pre>
+  </div>
+</section>
+
+<!-- ===== footer ===== -->
+<footer>
+  <h2 id="more-resources">More resources</h2>
+  <ul>
+    <li>MDN: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event#keydown_events_with_ime">keydown events with IME</a></li>
+    <li>MDN: <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/isComposing">KeyboardEvent.isComposing</a></li>
+    <li>Wikipedia: <a href="https://en.wikipedia.org/wiki/Input_method">Input method</a>, <a href="https://en.wikipedia.org/wiki/Japanese_input_method">Japanese input method</a></li>
+  </ul>
+  <h2 id="changelog">Changelog</h2>
+  <details>
+    <summary>Version history</summary>
+    <ul>
+      <li><strong>2026-07-17</strong> — Full redesign as a standalone static page: dark broken-vs-fixed theme, the split demo promoted to the hero with auto-play, a keystroke visualizer and live counters, framework code tabs with copy buttons, and a copy-paste bug report template.</li>
+      <li><strong>2026-07-16</strong> — Added an interactive demo that simulates IME typing (no IME needed), a live event inspector, framework notes for React and Vue, steps for testing with a real IME, and a note on why custom keydown handlers (not plain forms) are where this bug lives.</li>
+      <li><strong>2026-04-17</strong> — Added <code>isComposing</code> code example and Safari fallback explanation. Expanded scope to cover Chinese and Korean IME. Replaced dead W3C link with MDN references. Added concrete examples for chat interfaces and AI generation tools.</li>
+      <li><strong>2024-03-17</strong> — Initial publication.</li>
+    </ul>
+  </details>
+  <p class="author-line"><span id="author">Kairin — <a href="https://x.com/ckrunch">X</a></span> · <a href="https://github.com/kai-rin/your-form-submits-mid-japanese-input">Source on GitHub</a></p>
+</footer>
+
+</main>
+
+<script>
+/* ===== IME split demo ===== */
+(function () {
+  "use strict";
+  var CHUNKS = [
+    { kana: ["あ", "あす", "あすの", "あすのか", "あすのかい", "あすのかいぎ", "あすのかいぎは"],
+      roma: ["a", "su", "no", "ka", "i", "gi", "ha"],
+      converted: "明日の会議は" },
+    { kana: ["1", "10", "10じ", "10じか", "10じから", "10じからで", "10じからです"],
+      roma: ["1", "0", "ji", "ka", "ra", "de", "su"],
+      converted: "10時からです" }
+  ];
+  var demo = document.getElementById("ime-demo");
+  if (!demo) return;
+  var el = {
+    instruction: document.getElementById("ime-demo-instruction"),
+    summary: document.getElementById("ime-demo-summary"),
+    caps: document.getElementById("ime-keystrip-caps"),
+    msgs: { broken: document.getElementById("ime-msgs-broken"), fixed: document.getElementById("ime-msgs-fixed") },
+    inputs: { broken: document.getElementById("ime-input-broken"), fixed: document.getElementById("ime-input-fixed") },
+    counts: { broken: document.getElementById("ime-count-broken"), fixed: document.getElementById("ime-count-fixed") },
+    keyType: document.getElementById("ime-key-type"),
+    keySpace: document.getElementById("ime-key-space"),
+    keyEnter: document.getElementById("ime-key-enter"),
+    keyAuto: document.getElementById("ime-key-auto"),
+    keyReset: document.getElementById("ime-key-reset")
+  };
+  var state = null;
+  var timer = null;
+  var interacted = false;
+  var autoFired = false;
+  var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function instruct(html) {
+    el.instruction.innerHTML = html;
+    el.instruction.parentNode.classList.remove("ime-hint-flash");
+  }
+  function hint(html) {
+    var box = el.instruction.parentNode;
+    el.instruction.innerHTML = html;
+    box.classList.remove("ime-hint-flash");
+    void box.offsetWidth;
+    box.classList.add("ime-hint-flash");
+  }
+  function pushCap(label, cls) {
+    var s = document.createElement("span");
+    s.className = "ime-cap" + (cls ? " " + cls : "");
+    s.textContent = label;
+    el.caps.appendChild(s);
+    while (el.caps.children.length > 14) el.caps.removeChild(el.caps.firstChild);
+  }
+
+  function reset() {
+    stopAuto();
+    state = {
+      chunk: 0, pos: 0, phase: "typing", composing: "", converted: false,
+      panes: { broken: { committed: "", msgs: [] }, fixed: { committed: "", msgs: [] } }
+    };
+    el.summary.innerHTML = "";
+    el.caps.innerHTML = "";
+    instruct("Type any letters (or tap the keys below) — the simulated IME turns them into Japanese.");
+    render();
+  }
+
+  function press(kind) {
+    if (!state || state.phase === "done") return;
+    var c = CHUNKS[state.chunk];
+    if (state.phase === "typing") {
+      if (kind === "char") {
+        state.pos = Math.min(state.pos + 1, c.kana.length);
+        state.composing = c.kana[state.pos - 1];
+        pushCap(c.roma[state.pos - 1]);
+        if (state.pos === c.kana.length) {
+          state.phase = "convert";
+          instruct("Reading typed: <strong lang=\"ja\">" + state.composing + "</strong>. Now press <kbd>Space</kbd> to convert to kanji.");
+        } else {
+          instruct("Keep typing… the IME is composing (" + (c.kana.length - state.pos) + " more keys).");
+        }
+      } else {
+        hint("Just type some letters first — any letters work.");
+      }
+    } else if (state.phase === "convert") {
+      if (kind === "space") {
+        state.converted = true;
+        state.composing = c.converted;
+        state.phase = "confirm";
+        pushCap("Space", "ime-cap-space");
+        instruct("The IME suggests <strong lang=\"ja\">" + c.converted + "</strong>. Press <kbd>Enter</kbd> to confirm the conversion — <em>not</em> to send.");
+      } else {
+        hint("Press <kbd>Space</kbd> to convert the reading to kanji.");
+      }
+    } else if (state.phase === "confirm") {
+      if (kind === "enter") {
+        pushCap("Enter", "ime-cap-enter");
+        state.panes.broken.msgs.push({ text: state.panes.broken.committed + state.composing, premature: true });
+        state.panes.broken.committed = "";
+        state.panes.fixed.committed += state.composing;
+        state.composing = "";
+        state.converted = false;
+        if (state.chunk + 1 < CHUNKS.length) {
+          state.chunk++;
+          state.pos = 0;
+          state.phase = "typing";
+          instruct("💥 The broken form just <strong>sent a fragment</strong>! The fixed form only confirmed the text. Keep typing the rest of the sentence.");
+        } else {
+          state.phase = "send";
+          instruct("💥 Another fragment fired! The fixed form now holds the whole sentence. Press <kbd>Enter</kbd> once more — this time it really means “send”.");
+        }
+      } else {
+        hint("Press <kbd>Enter</kbd> to confirm the kanji — that is what an IME user must do here.");
+      }
+    } else if (state.phase === "send") {
+      if (kind === "enter") {
+        pushCap("Enter", "ime-cap-enter");
+        state.panes.broken.msgs.push({ system: true, text: "(nothing left to send — the message already left in pieces)" });
+        state.panes.fixed.msgs.push({ text: state.panes.fixed.committed, premature: false });
+        state.panes.fixed.committed = "";
+        state.phase = "done";
+        stopAuto();
+        instruct("Done. Same keystrokes, very different results. Now <a href=\"#the-quick-fix-check-iscomposing\">grab the fix</a>.");
+        el.summary.innerHTML = "Broken form: <strong>2 fragments</strong>, the full sentence was never sent. Fixed form: <strong>1 complete message</strong> — <span lang=\"ja\">「明日の会議は10時からです」</span> (“Tomorrow's meeting starts at 10.”)";
+      } else {
+        hint("Press <kbd>Enter</kbd> to send the finished message.");
+      }
+    }
+    render();
+  }
+
+  function renderPane(name) {
+    var p = state.panes[name];
+    var m = el.msgs[name];
+    m.innerHTML = "";
+    if (!p.msgs.length) {
+      var e = document.createElement("div");
+      e.className = "ime-empty";
+      e.textContent = "No messages yet";
+      m.appendChild(e);
+    }
+    p.msgs.forEach(function (msg) {
+      var d = document.createElement("div");
+      if (msg.system) {
+        d.className = "ime-sysline";
+        d.textContent = msg.text;
+      } else {
+        d.className = "ime-bubble " + (msg.premature ? "ime-bubble-premature" : "ime-bubble-ok");
+        var t = document.createElement("div");
+        t.textContent = msg.text;
+        d.appendChild(t);
+        var b = document.createElement("div");
+        b.className = "ime-badge";
+        b.textContent = msg.premature ? "✗ sent mid-sentence" : "✓ complete message";
+        d.appendChild(b);
+      }
+      m.appendChild(d);
+    });
+    m.scrollTop = m.scrollHeight;
+    var real = p.msgs.filter(function (msg) { return !msg.system; }).length;
+    if (name === "broken") {
+      el.counts.broken.textContent = real + (real === 1 ? " fragment" : " fragments");
+    } else {
+      el.counts.fixed.textContent = real + (real === 1 ? " message" : " messages");
+    }
+    var inp = el.inputs[name];
+    inp.innerHTML = "";
+    if (p.committed) inp.appendChild(document.createTextNode(p.committed));
+    if (state.composing) {
+      var s = document.createElement("span");
+      s.className = state.converted ? "ime-converted" : "ime-composing";
+      s.textContent = state.composing;
+      inp.appendChild(s);
+    }
+    if (!p.committed && !state.composing) {
+      var ph = document.createElement("span");
+      ph.className = "ime-placeholder";
+      ph.textContent = "Type a message…";
+      inp.appendChild(ph);
+    }
+  }
+
+  function render() {
+    renderPane("broken");
+    renderPane("fixed");
+  }
+
+  function stopAuto() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+    el.keyAuto.textContent = "▶ Watch it happen";
+  }
+
+  function autoPlay() {
+    if (timer) { stopAuto(); return; }
+    reset();
+    el.keyAuto.textContent = "⏸ Stop";
+    var queue = [];
+    CHUNKS.forEach(function (c) {
+      c.kana.forEach(function () { queue.push("char"); });
+      queue.push("pause", "space", "pause", "pause", "enter", "pause", "pause");
+    });
+    queue.push("enter");
+    var i = 0;
+    timer = setInterval(function () {
+      if (i >= queue.length) { stopAuto(); return; }
+      var k = queue[i++];
+      if (k !== "pause") press(k);
+    }, 280);
+  }
+
+  function manual(kind) {
+    interacted = true;
+    if (timer) stopAuto();
+    if (state && state.phase === "done") {
+      if (kind === "char") reset(); else return;
+    }
+    press(kind);
+  }
+
+  demo.addEventListener("keydown", function (e) {
+    if (e.isComposing || e.keyCode === 229) return;
+    if (e.key === "Enter") { e.preventDefault(); manual("enter"); }
+    else if (e.key === " " || e.key === "Spacebar") { e.preventDefault(); manual("space"); }
+    else if (/^[a-z0-9]$/i.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); manual("char"); }
+  });
+  demo.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("button")) return;
+    demo.focus();
+  });
+  el.keyType.addEventListener("click", function () { manual("char"); demo.focus(); });
+  el.keySpace.addEventListener("click", function () { manual("space"); demo.focus(); });
+  el.keyEnter.addEventListener("click", function () { manual("enter"); demo.focus(); });
+  el.keyAuto.addEventListener("click", function () { interacted = true; autoFired = true; autoPlay(); });
+  el.keyReset.addEventListener("click", function () { reset(); demo.focus(); });
+
+  reset();
+
+  /* auto-play once when the demo scrolls well into view (skipped for reduced motion) */
+  if (!reducedMotion && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      if (autoFired || interacted) { io.disconnect(); return; }
+      if (entries[0].intersectionRatio >= 0.6) {
+        autoFired = true;
+        io.disconnect();
+        setTimeout(function () { if (!interacted && !timer) autoPlay(); }, 700);
+      }
+    }, { threshold: [0.6] });
+    io.observe(demo);
+  }
+})();
+
+/* ===== live event inspector ===== */
+(function () {
+  "use strict";
+  var ta = document.getElementById("ime-inspector-input");
+  var log = document.getElementById("ime-inspector-log");
+  var clearBtn = document.getElementById("ime-inspector-clear");
+  if (!ta || !log) return;
+  function pad(s, n) {
+    s = String(s);
+    while (s.length < n) s += " ";
+    return s;
+  }
+  function row(txt, cls) {
+    var d = document.createElement("div");
+    if (cls) d.className = cls;
+    d.textContent = txt;
+    log.appendChild(d);
+    while (log.children.length > 80) log.removeChild(log.firstChild);
+    log.scrollTop = log.scrollHeight;
+  }
+  ta.addEventListener("keydown", function (e) {
+    var line = pad("keydown", 19) + pad("key=" + JSON.stringify(e.key), 16) + pad("isComposing=" + e.isComposing, 20) + "keyCode=" + e.keyCode;
+    if (e.key === "Enter") {
+      var blocked = e.isComposing || e.keyCode === 229;
+      row(line, blocked ? "ime-log-blocked" : "ime-log-submit");
+      row(blocked ? "  → the fix says: IGNORE (IME is composing)" : "  → the fix says: SUBMIT", blocked ? "ime-log-blocked" : "ime-log-submit");
+    } else {
+      row(line);
+    }
+  });
+  ["compositionstart", "compositionupdate", "compositionend"].forEach(function (type) {
+    ta.addEventListener(type, function (e) {
+      row(pad(type, 19) + "data=" + JSON.stringify(e.data), "ime-log-comp");
+    });
+  });
+  clearBtn.addEventListener("click", function () { log.innerHTML = ""; });
+})();
+
+/* ===== page UI: code tabs + copy buttons ===== */
+(function () {
+  "use strict";
+  document.querySelectorAll(".code-tabs").forEach(function (tabs) {
+    var panels = Array.prototype.slice.call(tabs.querySelectorAll(".code-panel"));
+    if (panels.length < 2) return;
+    var bar = document.createElement("div");
+    bar.className = "tabbar";
+    bar.setAttribute("role", "tablist");
+    var buttons = panels.map(function (panel, i) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("role", "tab");
+      btn.textContent = panel.getAttribute("data-label") || ("Tab " + (i + 1));
+      btn.addEventListener("click", function () { select(i); });
+      bar.appendChild(btn);
+      panel.setAttribute("role", "tabpanel");
+      return btn;
+    });
+    function select(idx) {
+      panels.forEach(function (panel, i) {
+        panel.hidden = i !== idx;
+        buttons[i].setAttribute("aria-selected", i === idx ? "true" : "false");
+      });
+    }
+    tabs.insertBefore(bar, tabs.firstChild);
+    tabs.classList.add("tabs-on");
+    select(0);
+  });
+
+  function flash(btn, ok) {
+    var old = btn.textContent;
+    btn.textContent = ok ? "Copied ✓" : "Copy failed";
+    btn.classList.toggle("copied", ok);
+    setTimeout(function () {
+      btn.textContent = old;
+      btn.classList.remove("copied");
+    }, 1600);
+  }
+  function copyText(text, btn) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { flash(btn, true); }, function () { legacyCopy(text, btn); });
+    } else {
+      legacyCopy(text, btn);
+    }
+  }
+  function legacyCopy(text, btn) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    flash(btn, ok);
+  }
+  document.querySelectorAll(".code-card .copy-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var pre = btn.parentNode.querySelector("pre");
+      if (pre) copyText(pre.textContent, btn);
+    });
+  });
+  var linkBtn = document.getElementById("copy-page-link");
+  if (linkBtn) {
+    linkBtn.addEventListener("click", function () {
+      copyText("https://kai-rin.github.io/your-form-submits-mid-japanese-input/", linkBtn);
+    });
+  }
+})();
+</script>
+</body>
+</html>
