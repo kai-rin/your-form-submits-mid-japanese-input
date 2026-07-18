@@ -17,6 +17,7 @@
 - 모든 최신 브라우저에서 작동하는 코드 수정 예시 (`isComposing` 체크) 및 React/Vue 관련 참고 사항
 - 실시간 이벤트 인스펙터와 실제 IME로 자신의 폼을 테스트하는 단계별 방법
 - 폼 제출 방식의 설계 대안
+- 브라우저 밖의 이야기: Electron/WebView 앱에 그대로 적용되는 동일한 수정 방법과, Windows / macOS 네이티브 앱에서의 composing 체크 대응 API
 
 ## 사이트 보기
 

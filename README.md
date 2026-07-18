@@ -17,6 +17,7 @@ The static site in this repository provides:
 - A concrete code fix (`isComposing` check) that works in all modern browsers, with React/Vue notes
 - A live event inspector and step-by-step instructions for testing your own form with a real IME
 - Design alternatives for form submission behavior
+- Notes beyond the browser: the same fix for Electron/WebView apps, and the native equivalents of the composing check on Windows and macOS
 
 ## View the site
 

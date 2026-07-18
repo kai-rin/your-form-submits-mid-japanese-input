@@ -736,6 +736,18 @@ onEnter(e) {
   <div class="callout"><strong>The rule:</strong> never let a bare Enter keypress trigger submission without checking whether the user is composing text.</div>
 </section>
 
+<!-- ===== beyond ===== -->
+<section id="not-just-the-web">
+  <p class="eyebrow">beyond the browser</p>
+  <h2>Not just a web bug</h2>
+  <p>IME users hit the same premature “send” in desktop and mobile apps. If you build native software, the rule is identical — only the API you ask changes:</p>
+  <ul>
+    <li><strong>Electron and WebView apps</strong> — many desktop apps (chat clients, editors, AI tools) are a browser engine inside. Their input handling is DOM <code>keydown</code>, so the <code>isComposing</code> fix above applies as-is.</li>
+    <li><strong>Truly native apps</strong> — every platform exposes “is the user composing?” under its own name. On Windows, keys the IME is consuming arrive as <code>VK_PROCESSKEY</code> — value 229, the very number behind the web's <code>keyCode === 229</code> fallback. On macOS, a text view has <em>marked text</em> while composition is active (<code>hasMarkedText</code> in <code>NSTextInputClient</code>). Cross-platform toolkits (Qt, Flutter, and others) surface the same state through their input-method events.</li>
+  </ul>
+  <p>Whatever the platform: ask it whether a composition is in progress before treating Enter as “send”.</p>
+</section>
+
 <!-- ===== proof ===== -->
 <section id="how-to-test-it-with-a-real-ime">
   <p class="eyebrow">the proof</p>
@@ -797,6 +809,7 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
   <details>
     <summary>Version history</summary>
     <ul>
+      <li><strong>2026-07-18</strong> — Added a “beyond the browser” section: the same bug and fix in Electron/WebView apps, and the native equivalents of the composing check (<code>VK_PROCESSKEY</code> on Windows, marked text on macOS).</li>
       <li><strong>2026-07-17</strong> — Added a light theme (follows your system setting, with a manual toggle) and an accessibility pass: keyboard-navigable code tabs, focusable scrollable regions, uniquely named copy buttons, a labeled inspector field, stronger control borders, and quieter screen-reader announcements during the demo's auto-play.</li>
       <li><strong>2026-07-17</strong> — Full redesign as a standalone static page: dark broken-vs-fixed theme, the split demo promoted to the hero with auto-play, a keystroke visualizer and live counters, framework code tabs with copy buttons, and a copy-paste bug report template.</li>
       <li><strong>2026-07-16</strong> — Added an interactive demo that simulates IME typing (no IME needed), a live event inspector, framework notes for React and Vue, steps for testing with a real IME, and a note on why custom keydown handlers (not plain forms) are where this bug lives.</li>

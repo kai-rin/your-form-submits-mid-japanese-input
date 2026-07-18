@@ -17,6 +17,7 @@
 - 适用于所有现代浏览器的代码修复示例（`isComposing` 检查），以及 React/Vue 相关注意事项
 - 实时事件查看器，以及使用真实输入法测试自己表单的分步说明
 - 表单提交方式的设计替代方案
+- 浏览器之外：同样的修复可直接用于 Electron/WebView 应用，以及 Windows / macOS 原生应用中 composing 检查的对应 API
 
 ## 查看网站
 
