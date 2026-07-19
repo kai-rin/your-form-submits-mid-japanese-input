@@ -261,14 +261,19 @@ section { margin-top: 96px; }
 }
 .ime-demo:focus-visible, .ime-demo:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-ring); }
 .ime-demo-prompt {
-  min-height: 2.6em;
+  min-height: 3.3em; /* 2 lines at line-height 1.65 */
   font-size: 14.5px;
   margin-bottom: 10px;
   padding: 8px 10px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  /* instruction and an invisible copy of the tallest instruction are stacked in the
+     same grid cell, so the box is always as tall as the tallest text can get */
+  display: grid;
 }
+.ime-demo-prompt > * { grid-area: 1 / 1; }
+.ime-prompt-ghost { visibility: hidden; line-height: 1.7; /* ≥ the [lang=ja] line-height used by some instructions */ }
 .ime-hint-flash { animation: ime-flash 0.5s; }
 @keyframes ime-flash { 0% { background: var(--flash); } 100% { background: var(--bg); } }
 .ime-keystrip {
@@ -285,6 +290,17 @@ section { margin-top: 96px; }
   font-family: var(--font-mono);
 }
 .ime-keystrip-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 4px; flex-shrink: 0; }
+.ime-keystrip::after {
+  /* invisible zero-width key cap: reserves the with-keys height so the strip doesn't grow on the first keystroke */
+  content: "Enter";
+  visibility: hidden;
+  width: 0;
+  font-size: 12px;
+  padding: 2px 0;
+  border: 0 solid transparent;
+  border-top-width: 1px;
+  border-bottom-width: 3px;
+}
 .ime-cap {
   font-size: 12px;
   padding: 2px 7px;
@@ -333,10 +349,12 @@ section { margin-top: 96px; }
   border-radius: 99px;
   padding: 1px 8px;
   white-space: nowrap;
+  text-align: center; /* labels vary in length inside a width-locked pill */
 }
 .ime-pane-messages {
   flex: 1;
-  min-height: 150px;
+  /* fixed height: the panes must not grow as messages arrive */
+  min-height: 200px;
   max-height: 200px;
   overflow-y: auto;
   padding: 10px;
@@ -389,13 +407,19 @@ button.ime-key { border: 1px solid var(--border-strong); border-bottom-width: 4p
 button.ime-key:active { border-bottom-width: 1px; transform: translateY(3px); }
 button.ime-ctrl { border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); }
 button.ime-ctrl:hover { background: var(--accent-soft-hover); }
-.ime-demo-summary { margin-top: 10px; font-size: 14.5px; }
-.ime-demo-summary:not(:empty) {
-  border-left: 3px solid var(--accent);
+.ime-demo-summary {
+  margin-top: 10px;
+  font-size: 14.5px;
+  border-left: 3px solid transparent;
   padding: 8px 12px;
-  background: var(--bg);
   border-radius: 0 var(--radius) var(--radius) 0;
 }
+.ime-demo-summary.ime-summary-done {
+  border-left-color: var(--accent);
+  background: var(--bg);
+}
+/* invisible copy of the final summary keeps the box at its final height from the start */
+.ime-summary-ghost { visibility: hidden; }
 .ime-smallprint { font-size: 13px; color: var(--text-muted); margin-top: 10px; }
 
 /* ===== stats ===== */
@@ -585,7 +609,7 @@ footer details summary { cursor: pointer; font-weight: 700; }
       <span>goal: send <span lang="ja">「明日の会議は10時からです」</span> (“Tomorrow's meeting starts at 10”)</span>
     </div>
     <div class="ime-demo" id="ime-demo" tabindex="0" role="group" aria-label="Interactive IME simulation demo" aria-describedby="ime-demo-note">
-      <div class="ime-demo-prompt"><span id="ime-demo-instruction" aria-live="polite">Press <strong>▶ Watch it happen</strong> below — or just start typing any letters; the simulated IME turns them into Japanese.</span></div>
+      <div class="ime-demo-prompt"><span id="ime-demo-instruction" aria-live="polite">Press <strong>▶ Watch it happen</strong> below — or just start typing any letters; the simulated IME turns them into Japanese.</span><span class="ime-prompt-ghost" aria-hidden="true">💥 Another fragment fired! The fixed form now holds the whole sentence. Press <kbd>Enter</kbd> once more — this time it really means “send”.</span></div>
       <div class="ime-keystrip" aria-hidden="true"><span class="ime-keystrip-label">keys</span><span id="ime-keystrip-caps" style="display:flex;gap:5px;"></span></div>
       <div class="ime-demo-panes">
         <div class="ime-pane ime-pane-broken">
@@ -834,6 +858,8 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
       roma: ["1", "0", "ji", "ka", "ra", "de", "su"],
       converted: "10時からです" }
   ];
+  /* also rendered invisibly while the demo runs, so the summary box never changes height */
+  var SUMMARY_HTML = "Broken form: <strong>2 fragments</strong>, the full sentence was never sent. Fixed form: <strong>1 complete message</strong> — <span lang=\"ja\">「明日の会議は10時からです」</span> (“Tomorrow's meeting starts at 10.”)";
   var demo = document.getElementById("ime-demo");
   if (!demo) return;
   var el = {
@@ -880,7 +906,8 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
       chunk: 0, pos: 0, phase: "typing", composing: "", converted: false,
       panes: { broken: { committed: "", msgs: [] }, fixed: { committed: "", msgs: [] } }
     };
-    el.summary.innerHTML = "";
+    el.summary.innerHTML = "<span class=\"ime-summary-ghost\">" + SUMMARY_HTML + "</span>";
+    el.summary.classList.remove("ime-summary-done");
     el.caps.innerHTML = "";
     instruct("Type any letters (or tap the keys below) — the simulated IME turns them into Japanese.");
     render();
@@ -942,7 +969,8 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
         state.phase = "done";
         stopAuto();
         instruct("Done. Same keystrokes, very different results. Now <a href=\"#the-quick-fix-check-iscomposing\">grab the fix</a>.");
-        el.summary.innerHTML = "Broken form: <strong>2 fragments</strong>, the full sentence was never sent. Fixed form: <strong>1 complete message</strong> — <span lang=\"ja\">「明日の会議は10時からです」</span> (“Tomorrow's meeting starts at 10.”)";
+        el.summary.innerHTML = SUMMARY_HTML;
+        el.summary.classList.add("ime-summary-done");
       } else {
         hint("Press <kbd>Enter</kbd> to send the finished message.");
       }
@@ -1063,6 +1091,12 @@ Demo and details: https://kai-rin.github.io/your-form-submits-mid-japanese-input
   el.keyReset.addEventListener("click", function () { reset(); demo.focus(); });
 
   reset();
+
+  /* the initial labels ("▶ Watch it happen", "0 fragments", "0 messages") are the widest —
+     lock their width so label changes ("⏸ Stop", "1 message") don't shift the layout */
+  [el.keyAuto, el.counts.broken, el.counts.fixed].forEach(function (n) {
+    n.style.minWidth = n.getBoundingClientRect().width + "px";
+  });
 
   /* auto-play once when the demo scrolls well into view (skipped for reduced motion) */
   if (!reducedMotion && "IntersectionObserver" in window) {
